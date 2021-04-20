@@ -14,7 +14,7 @@ public class BBCNewsControllerTest {
 
     @Test
     public void shouldScrapWithoutErrors() throws IOException {
-        // assertEquals("done", controller.scrapMainPage());
+        assertThatCode(() -> controller.scrapMainPage()).doesNotThrowAnyException();
     }
 
     @Test
