@@ -100,4 +100,68 @@ public class NewsController {
 
         return new ResponseEntity<>(news.get(), HttpStatus.OK);
     }
+
+    // requested by backend
+    @GetMapping("/getInterval")
+    public List<News> getInterval(@RequestParam(name = "skip", required = true) Integer skip,
+            @RequestParam(name = "count", required = true) Integer count) {
+        List<News> list = this.newsRepository.findAll();
+
+        List<News> filteredList = new ArrayList<>();
+
+        int i = 0;
+
+        for (News news : list) {
+            if (i == (count + skip)) // numerotarea incepe de la 0..
+            {
+                break;
+            }
+            if (i >= skip) {
+                filteredList.add(news);
+            }
+            i++;
+        }
+
+        return filteredList;
+    }
+
+    @GetMapping("/getIntervalByProvider")
+    public List<News> getIntervalByProvider(@RequestParam(name = "provider_id", required = true) Integer provider_id,
+            @RequestParam(name = "skip", required = true) Integer skip,
+            @RequestParam(name = "count", required = true) Integer count) {
+
+        List<News> list = this.newsRepository.findAll();
+
+        List<News> filteredList = new ArrayList<>();
+        String newsSource = "";
+        if (provider_id == 0) {
+            newsSource = "bbc";
+        } else if (provider_id == 1) {
+            newsSource = "buzzfeednews";
+        } else if (provider_id == 2) {
+            newsSource = "huffpost";
+        } else if (provider_id == 3) {
+            newsSource = "nbcnews";
+        } else if (provider_id == 4) {
+            newsSource = "nypost";
+        }
+
+        int i = 0;
+
+        for (News news : list) {
+
+            if (news.getUrl() != null && newsSource != null && news.getUrl().contains(newsSource.toLowerCase())) {
+                if (i == (count + skip)) // numerotarea incepe de la 0..
+                {
+                    break;
+                }
+                if (i >= skip) {
+                    filteredList.add(news);
+                }
+                i++;
+            }
+        }
+
+        return filteredList;
+    }
 }
