@@ -16,6 +16,9 @@ public class NewsService implements INewsService {
     @Autowired
     private NewsRepository repository;
 
+    public NewsService(NewsRepository repository) {
+    }
+
     @Override
     public List<News> findPaginated(int pageNo, int pageSize) {
 

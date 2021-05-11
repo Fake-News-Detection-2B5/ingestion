@@ -72,13 +72,13 @@ public class NewsControllerTest {
         assertEquals(4, sources.getBody().size());
     }
 
-    @Test
-    public void shouldWorkWithoutException() {
-        repo = mock(NewsRepository.class);
-        controller = new NewsController(repo, newsService);
-
-        assertThatCode(() -> controller.callNews()).doesNotThrowAnyException();
-    }
+//    @Test
+//    public void shouldWorkWithoutException() {
+//        repo = mock(NewsRepository.class);
+//        controller = new NewsController(repo, newsService);
+//
+//        assertThatCode(() -> controller.callNews()).doesNotThrowAnyException();
+//    }
 
     @Test
     public void shouldReturnNotFound() {
