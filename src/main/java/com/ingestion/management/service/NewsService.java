@@ -17,6 +17,7 @@ public class NewsService implements INewsService {
     private NewsRepository repository;
 
     public NewsService(NewsRepository repository) {
+        this.repository = repository;
     }
 
     @Override
