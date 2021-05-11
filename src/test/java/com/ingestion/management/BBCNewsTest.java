@@ -1,14 +1,12 @@
 package com.ingestion.management;
 
 import org.junit.jupiter.api.Test;
-
-import com.ingestion.management.business.BBCNews;
-
+import com.ingestion.management.business.BBCNewsController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 
 public class BBCNewsTest {
 
-    private BBCNews controller = new BBCNews();
+    private BBCNewsController controller = new BBCNewsController();
 
     @Test
     public void shouldScrapWithoutErrors() {
@@ -16,7 +14,7 @@ public class BBCNewsTest {
     }
 
     @Test
-    public void scrapWithoutErrorsStaticMethod() {
+    public void scrapWithoutErrorsPageContent() {
         assertThatCode(() -> controller.scrapPageContent("/news")).doesNotThrowAnyException();
     }
 }
