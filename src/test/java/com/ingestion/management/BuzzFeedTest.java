@@ -2,19 +2,18 @@ package com.ingestion.management;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
-import com.ingestion.management.business.BBCNewsController;
+import com.ingestion.management.business.BuzzFeed;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BBCNewsControllerTest {
+public class BuzzFeedTest {
 
-    private BBCNewsController controller = new BBCNewsController();
+    private BuzzFeed controller = new BuzzFeed();
 
     @Test
-    public void shouldScrapWithoutErrors() throws IOException {
-        // assertEquals("done", controller.scrapMainPage());
+    public void shouldScrapWithoutErrors() {
+        assertThatCode(() -> controller.scrapMainPage()).doesNotThrowAnyException();
     }
 
     @Test

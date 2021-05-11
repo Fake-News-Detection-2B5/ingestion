@@ -1,4 +1,4 @@
-package com.ingestion.management.service;
+package com.ingestion.management.repository;
 
 import java.util.UUID;
 

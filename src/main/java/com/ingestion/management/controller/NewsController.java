@@ -1,15 +1,27 @@
 package com.ingestion.management.controller;
 
-import com.ingestion.management.business.BBCNewsController;
-import com.ingestion.management.business.BuzzFeedController;
-import com.ingestion.management.business.NBCNewsController;
+import com.google.gson.Gson;
+
+//import com.ingestion.management.business.BBCNewsController;
+
+
+import com.ingestion.management.business.*;
+//import com.ingestion.management.business.NewsSources;
+
+//import com.ingestion.management.business.BuzzFeedController;
+//import com.ingestion.management.business.NBCNewsController;
 import com.ingestion.management.model.News;
-import com.ingestion.management.service.NewsRepository;
+import com.ingestion.management.repository.NewsRepository;
+import com.ingestion.management.service.INewsService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,8 +32,18 @@ import java.util.UUID;
 public class NewsController {
     private NewsRepository newsRepository;
 
-    public NewsController(NewsRepository newsRepository) {
+    public NewsController(NewsRepository newsRepository, INewsService newsService) {
         this.newsRepository = newsRepository;
+        // this.newsService = newsService;
+    }
+
+    @Autowired
+    private INewsService newsService;
+
+    /* get request cu paginare */
+    @GetMapping("/paging/{pageNo}/{pageSize}")
+    public List<News> getPaginatedNews(@PathVariable int pageNo, @PathVariable int pageSize) {
+        return newsService.findPaginated(pageNo, pageSize);
     }
 
     @PostMapping("")
@@ -33,9 +55,38 @@ public class NewsController {
         return new ResponseEntity<>(newNews, HttpStatus.CREATED);
     }
 
+    @GetMapping("/newssources")
+    public ResponseEntity<List<String>> getNewsSources() {
+        List<String> newsSources = new ArrayList<>();
+
+        newsSources.add("bbc");
+        newsSources.add("buzzfeednews");
+        newsSources.add("huffpost");
+        newsSources.add("nbcnews");
+        newsSources.add("nypost");
+
+        return new ResponseEntity<>(newsSources, HttpStatus.OK);
+    }
+
+    @GetMapping("{newsSource}")
+    public ResponseEntity<List<News>> getAllNews(@RequestParam String newsSource) {
+        List<News> list = this.newsRepository.findAll();
+
+        List<News> filteredList = new ArrayList<>();
+
+        for (News news : list) {
+            if (news.getUrl() != null && newsSource != null && news.getUrl().contains(newsSource.toLowerCase())) {
+                filteredList.add(news);
+            }
+        }
+
+        return new ResponseEntity<>(filteredList, HttpStatus.OK);
+    }
+
     @GetMapping("")
     public ResponseEntity<List<News>> getAll() {
         List<News> list = this.newsRepository.findAll();
+
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
@@ -48,27 +99,5 @@ public class NewsController {
         }
 
         return new ResponseEntity<>(news.get(), HttpStatus.OK);
-    }
-
-    @GetMapping("callNews")
-    public void callNews() throws IOException {
-        // call BBC news
-        BBCNewsController bbcNewsController = new BBCNewsController();
-        bbcNewsController.scrapMainPage();
-
-        // call NBC news
-        NBCNewsController nbcNewsController = new NBCNewsController();
-        nbcNewsController.scrapMainPage();
-
-        // call BuzzFeed news
-        BuzzFeedController buzzFeedController = new BuzzFeedController();
-        buzzFeedController.scrapMainPage();
-
-        // 1. parse jsons and create a List of News
-        // 2. using saveAll from newsRepository save all the records into the
-        // mongoDB collection
-        // 3. eq this.newsRepository.saveAll(entities) where entities is out list
-        // of News
-
     }
 }

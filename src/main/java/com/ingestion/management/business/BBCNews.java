@@ -8,12 +8,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+//import io.swagger.v3.core.util.Json;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class BBCNewsController {
-    public ArrayList<String> urlList = new ArrayList<String>();
+public class BBCNews {
+    public ArrayList<String> urlList = new ArrayList<>();
 
     public JSONObject scrapPageContent(String link) throws IOException {
 
@@ -25,11 +27,10 @@ public class BBCNewsController {
         String newsThumbnail = "Unknown";
         StringBuilder newsBody = new StringBuilder();
 
-        Document doc = Jsoup.connect(url).get();
+        Document doc = Jsoup.connect(url).userAgent("Mozilla").get();
         newsTitle = doc.title();
 
         Elements content = doc.getElementsByTag("article");
-
 
         for (Element divs : content) {
             Elements author = divs.getElementsByTag("strong");
@@ -48,8 +49,7 @@ public class BBCNewsController {
                     }
                 }
 
-                if (elem.attr("data-component").equals
-                        ("crosshead-block")) {
+                if (elem.attr("data-component").equals("crosshead-block")) {
                     Elements paragraphs = elem.getElementsByTag("h2");
                     newsBody.append(paragraphs.text());
                 }
@@ -64,13 +64,14 @@ public class BBCNewsController {
         return getJsonObject(url, newsDetails, newsTitle, newsAuthor, newsBody, newsDate, newsThumbnail);
     }
 
-    private JSONObject getJsonObject(String url, JSONObject newsDetails, String newsTitle, String newsAuthor, StringBuilder newsBody, String newsDate, String newsThumbnail) {
+    private JSONObject getJsonObject(String url, JSONObject newsDetails, String newsTitle, String newsAuthor,
+                                     StringBuilder newsBody, String newsDate, String newsThumbnail) {
         if (newsBody.length() != 0 && !urlList.contains(url)) {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", url);
-            newsDetails.put("content", JSONValue.escape(newsBody.toString()));
-            newsDetails.put("date", newsDate);
+            newsDetails.put("description", JSONValue.escape(newsBody.toString()));
+            newsDetails.put("postDate", newsDate);
             newsDetails.put("thumbnail", newsThumbnail);
 
             urlList.add(url);
@@ -79,15 +80,16 @@ public class BBCNewsController {
             return null;
     }
 
-    public void scrapMainPage() throws IOException {
+    public String scrapMainPage() throws IOException {
         JSONArray newsList = new JSONArray();
-        JSONObject tempNews = new JSONObject();
+        JSONObject tempNews;
 
-        String[] newsCategories = {"", "coronavirus", "world", "uk", "business", "technology", "science_and_environment", "entertainment_and_arts"};
+        String[] newsCategories = {"", "coronavirus", "world", "uk", "business", "technology",
+                "science_and_environment", "entertainment_and_arts"};
 
         for (String category : newsCategories) {
 
-            Document doc = Jsoup.connect("https://www.bbc.com/news/" + category).get();
+            Document doc = Jsoup.connect("https://www.bbc.com/news/" + category).userAgent("Mozilla").get();
 
             Element content = doc.getElementById("orb-modules");
             Elements links = content.getElementsByTag("a");
@@ -105,12 +107,6 @@ public class BBCNewsController {
 
             }
         }
-
-        try (FileWriter file = new FileWriter("BBC_News9.json")) {
-            file.write(newsList.toJSONString());
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return newsList.toJSONString();
     }
 }

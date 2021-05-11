@@ -1,6 +1,7 @@
 package com.ingestion.management.model;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
@@ -13,10 +14,11 @@ public class News {
     private UUID id;
 
     private String title;
-    private String thumbnail;
-    private String sourceUrl;
+    private String author;
+    private String url;
     private String description;
     private Date postDate;
+    private String thumbnail;
 
     public News() {
         setId(UUID.randomUUID());
@@ -30,20 +32,12 @@ public class News {
         this.id = id;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
-    public String getSourceUrl() {
-        return sourceUrl;
-    }
-
-    public void setSourceUrl(String sourceUrl) {
-        this.sourceUrl = sourceUrl;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getDescription() {
@@ -62,6 +56,14 @@ public class News {
         this.postDate = postDate;
     }
 
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -70,9 +72,34 @@ public class News {
         this.title = title;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        News news = (News) o;
+        return url.equals(news.url) && Objects.equals(id, news.id) && Objects.equals(author, news.author)
+                && Objects.equals(thumbnail, news.thumbnail) && Objects.equals(title, news.title)
+                && Objects.equals(description, news.description) && Objects.equals(postDate, news.postDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description, author, postDate, thumbnail, url);
+    }
+
     @Override
     public String toString() {
-        return "News{" + "id=" + id + ", title='" + title + '\'' + ", thumbnail='" + thumbnail + '\'' + ", sourceUrl='"
-                + sourceUrl + '\'' + ", description='" + description + '\'' + ", postDate=" + postDate + '}';
+        return "News{" + "id=" + id + ", title='" + title + '\'' + ", thumbnail='" + thumbnail + '\'' + ", url='" + url
+                + '\'' + ", description='" + description + '\'' + ", postDate=" + postDate + '}';
     }
 }

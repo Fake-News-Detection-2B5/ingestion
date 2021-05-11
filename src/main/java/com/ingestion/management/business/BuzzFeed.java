@@ -1,6 +1,5 @@
 package com.ingestion.management.business;
 
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -9,11 +8,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class BuzzFeedController {
+public class BuzzFeed {
     public ArrayList<String> urlList = new ArrayList<>();
 
     public JSONObject scrapPageContent(String link) throws IOException {
@@ -24,7 +22,7 @@ public class BuzzFeedController {
         String newsThumbnail = "Unknown";
         StringBuilder newsBody = new StringBuilder();
 
-        Document doc = Jsoup.connect(link).get();
+        Document doc = Jsoup.connect(link).userAgent("Mozilla").get();
         newsTitle = doc.title();
 
         if (doc.select("picture").select("img").attr("src").length() > 0) {
@@ -36,7 +34,8 @@ public class BuzzFeedController {
         for (Element e : mainBlock) {
             Elements author_elem = e.getElementsByTag("header");
             for (Element author : author_elem) {
-                Elements authorLinks = author.getElementsByTag("span").attr("class", "news-byline-full__name xs-block link-initial--text-black");
+                Elements authorLinks = author.getElementsByTag("span").attr("class",
+                        "news-byline-full__name xs-block link-initial--text-black");
                 if (authorLinks.size() > 0) {
                     Element a = authorLinks.get(0);
                     newsAuthor = a.getElementsByTag("span").get(1).text();
@@ -65,13 +64,14 @@ public class BuzzFeedController {
 
     }
 
-    private JSONObject getJsonObject(String url, JSONObject newsDetails, String newsTitle, String newsAuthor, StringBuilder newsBody, String newsDate, String newsThumbnail) {
+    private JSONObject getJsonObject(String url, JSONObject newsDetails, String newsTitle, String newsAuthor,
+                                     StringBuilder newsBody, String newsDate, String newsThumbnail) {
         if (newsBody.length() != 0 && !urlList.contains(url)) {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", url);
-            newsDetails.put("content", JSONValue.escape(newsBody.toString()));
-            newsDetails.put("date", newsDate);
+            newsDetails.put("description", JSONValue.escape(newsBody.toString()));
+            newsDetails.put("postDate", newsDate);
             newsDetails.put("thumbnail", newsThumbnail);
 
             urlList.add(url);
@@ -80,14 +80,15 @@ public class BuzzFeedController {
             return null;
     }
 
-
-    public void scrapMainPage() throws IOException {
+    public String scrapMainPage() throws IOException {
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
 
-        String[] newsCategories = {"", "section/arts-entertainment", "section/books", "section/culture", "section/inequality", "section/jpg", "section/lgbtq", "collection/opinion", "section/politics", "section/reader", "section/science", "section/tech", "section/world"};
+        String[] newsCategories = {"", "section/arts-entertainment", "section/books", "section/culture",
+                "section/inequality", "section/jpg", "section/lgbtq", "collection/opinion", "section/politics",
+                "section/reader", "section/science", "section/tech", "section/world"};
         for (String category : newsCategories) {
-            Document doc = Jsoup.connect("https://www.buzzfeednews.com/" + category).get();
+            Document doc = Jsoup.connect("https://www.buzzfeednews.com/" + category).userAgent("Mozilla").get();
 
             Elements mainBlock = (Elements) doc.getElementsByTag("main").attr("id", "news-content");
 
@@ -108,14 +109,6 @@ public class BuzzFeedController {
                 }
             }
         }
-
-        try (FileWriter file = new FileWriter("BuzzFeed_News4.json")) {
-            file.write(newsList.toJSONString());
-            file.flush();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        return newsList.toJSONString();
     }
 }

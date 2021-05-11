@@ -12,15 +12,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class NBCNewsController {
+public class NBCNews {
     public ArrayList<String> urlList = new ArrayList<>();
 
     public JSONObject scrapPageContent(String link) throws IOException {
         StringBuilder newsBody = new StringBuilder();
         JSONObject newsDetails = new JSONObject();
-        Document doc = Jsoup.connect(link).get();
+        Document doc = Jsoup.connect(link).userAgent("Mozilla").get();
         String newsTitle = doc.title();
         String newsAuthor = "Unknown";
+        String newsDate = "Unknown";
+        String newsThumbnail = "Unknown";
 
         Elements mainBlock = doc.getElementsByTag("article").attr("class", "article-body");
         for (Element e : mainBlock) {
@@ -56,32 +58,29 @@ public class NBCNewsController {
             return null;
     }
 
-    public void scrapMainPage() throws IOException {
-        String[] newsCategories = { "", "world", "politics", "business", "health", "entertainment", "style", "travel",
-                "sport" };
+
+    public String scrapMainPage() throws IOException {
+        String[] newsCategories = {"", "world", "politics", "business", "health", "entertainment"};
         JSONArray newsList = new JSONArray();
-        JSONObject tempNews = new JSONObject();
+        JSONObject tempNews;
 
-        String url = "https://www.nbcnews.com/";
-        Document doc = Jsoup.connect(url).get();
-        Elements mainLinks = doc.select("a[href]");
-        for (Element e : mainLinks) {
-            String tempUrl = e.attr("href");
-            if (tempUrl.matches("(.*)/(.*)[(0-9)]+")) {
-                if (!tempUrl.contains("/video/")) {
-                    System.out.println(tempUrl);
-                    tempNews = scrapPageContent(tempUrl);
-                    if (tempNews != null)
-                        newsList.add(tempNews);
+        for (String category : newsCategories) {
+            String url = "https://www.nbcnews.com/" + category;
+
+            Document doc = Jsoup.connect(url).userAgent("Mozilla").get();
+            Elements mainLinks = doc.select("a[href]");
+            for (Element e : mainLinks) {
+                String tempUrl = e.attr("href");
+                if (tempUrl.matches("(.*)/(.*)[(0-9)]+")) {
+                    if (!tempUrl.contains("/video/")) {
+                        tempNews = scrapPageContent(tempUrl);
+                        if (tempNews != null)
+                            newsList.add(tempNews);
+                    }
                 }
-            }
 
+            }
         }
-        try (FileWriter file = new FileWriter("NBC_1.json")) {
-            file.write(newsList.toJSONString());
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return newsList.toJSONString();
     }
 }
