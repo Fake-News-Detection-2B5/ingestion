@@ -1,10 +1,7 @@
 package com.ingestion.management.cron;
 
 import com.google.gson.Gson;
-import com.ingestion.management.business.BBCNews;
-import com.ingestion.management.business.HuffingtonPost;
-import com.ingestion.management.business.NBCNews;
-import com.ingestion.management.business.NewYorkPost;
+import com.ingestion.management.business.*;
 import com.ingestion.management.model.News;
 import com.ingestion.management.repository.NewsRepository;
 import com.ingestion.management.service.INewsService;
@@ -31,7 +28,7 @@ public class CronNews {
 
     }
 
-    @Scheduled(cron ="0 */5 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void callBBCNews() throws IOException {
         // call BBC news
         BBCNews bbcNews = new BBCNews();
@@ -44,7 +41,7 @@ public class CronNews {
 //        System.out.println("BBCNews---:"+ new Date());
     }
 
-    @Scheduled(cron ="0 */5 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void callHuffingtonPost() throws IOException {
         HuffingtonPost huffingtonNews = new HuffingtonPost();
         String huffintonnews = huffingtonNews.scrapMainPage();
@@ -56,7 +53,7 @@ public class CronNews {
 //        System.out.println("Huffington:"+ new Date());
     }
 
-    @Scheduled(cron ="0 */5 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void callNY() throws IOException {
         NewYorkPost nyNews = new NewYorkPost();
         String nynews = nyNews.scrapMainPage();
@@ -68,8 +65,8 @@ public class CronNews {
 //        System.out.println("NewYork---:"+ new Date());
     }
 
-    @Scheduled(cron ="0 */5 * * * *")
-    public void callNBC() throws IOException {
+    @Scheduled(cron = "0 */5 * * * *")
+    public void callNBC() throws IOException, InterruptedException {
         NBCNews nbcNews = new NBCNews();
         String nbcnews = nbcNews.scrapMainPage();
 
@@ -80,15 +77,15 @@ public class CronNews {
 //        System.out.println("NBCNews---:"+ new Date());
     }
 
-//    @Scheduled(cron ="0 */5 * * * *")
-//    public void callBuzzFeed() throws IOException {
-//    BuzzFeed bfNews = new BuzzFeed();
-//    String bfnews = bfNews.scrapMainPage();
-//
-//    Gson gson = new Gson();
-//    News[] newsBF = gson.fromJson(bfnews, News[].class);
-//
-//        this.newsRepository.saveAll(Arrays.asList(newsBF));
-//    System.out.println("BuzzFeed--:"+ new Date());
-//    }
+    @Scheduled(cron = "0 */5 * * * *")
+    public void callBuzzFeed() throws IOException {
+        BuzzFeed bfNews = new BuzzFeed();
+        String bfnews = bfNews.scrapMainPage();
+
+        Gson gson = new Gson();
+        News[] newsBF = gson.fromJson(bfnews, News[].class);
+
+        this.newsRepository.saveAll(Arrays.asList(newsBF));
+//        System.out.println("BuzzFeed--:" + new Date());
+    }
 }

@@ -18,6 +18,6 @@ public class BuzzFeedTest {
 
     @Test
     public void scrapWithoutErrorsStaticMethod() {
-        assertThatCode(() -> controller.scrapPageContent("/news")).doesNotThrowAnyException();
+        assertThatCode(() -> controller.scrapPageContent("https://www.buzzfeednews.com/article/christopherm51/craig-lang-ukraine-far-right-extremists-true-crime")).doesNotThrowAnyException();
     }
 }

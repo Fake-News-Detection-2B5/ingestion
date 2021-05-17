@@ -59,7 +59,7 @@ public class NewYorkPost {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", link);
-            newsDetails.put("content", JSONValue.escape(newsBody.toString()));
+            newsDetails.put("description", JSONValue.escape(newsBody.toString()));
             newsDetails.put("date", newsDate);
             newsDetails.put("thumbnail", newsThumbnail);
             urlList.add(link);

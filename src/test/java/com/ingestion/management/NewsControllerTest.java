@@ -69,7 +69,7 @@ public class NewsControllerTest {
         ResponseEntity<List<String> > sources = controller.getNewsSources();
 
         assertEquals(200, sources.getStatusCode().value());
-        assertEquals(4, sources.getBody().size());
+        assertEquals(6, sources.getBody().size());
     }
 
 //    @Test
