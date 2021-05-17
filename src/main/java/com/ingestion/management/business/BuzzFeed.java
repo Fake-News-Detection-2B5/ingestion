@@ -38,7 +38,9 @@ public class BuzzFeed {
                         "news-byline-full__name xs-block link-initial--text-black");
                 if (authorLinks.size() > 0) {
                     Element a = authorLinks.get(0);
-                    newsAuthor = a.getElementsByTag("span").get(1).text();
+                    if (a.getElementsByTag("span").size() > 2) {
+                        newsAuthor = a.getElementsByTag("span").get(1).text();
+                    }
                 }
             }
 
