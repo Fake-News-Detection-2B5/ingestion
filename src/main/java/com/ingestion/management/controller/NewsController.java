@@ -1,13 +1,12 @@
 package com.ingestion.management.controller;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 
 //import com.ingestion.management.business.BBCNewsController;
 
-
-import com.ingestion.management.business.*;
+//import com.ingestion.management.business.*;
 //import com.ingestion.management.business.NewsSources;
-
+import com.ingestion.management.model.IntWrapper;
 //import com.ingestion.management.business.BuzzFeedController;
 //import com.ingestion.management.business.NBCNewsController;
 import com.ingestion.management.model.News;
@@ -19,9 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+//import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -61,6 +60,7 @@ public class NewsController {
 
         newsSources.add("bbc");
         newsSources.add("buzzfeednews");
+        newsSources.add("dailymail");
         newsSources.add("huffpost");
         newsSources.add("nbcnews");
         newsSources.add("nypost");
@@ -144,6 +144,8 @@ public class NewsController {
             newsSource = "nbcnews";
         } else if (provider_id == 4) {
             newsSource = "nypost";
+        } else if (provider_id == 5) {
+            newsSource = "dailymail";
         }
 
         int i = 0;
@@ -164,4 +166,101 @@ public class NewsController {
 
         return filteredList;
     }
+
+    // * Public method for requesting all providers from the database
+    // * @return a List with every ProviderEntity from the database
+    // */
+    @GetMapping(path = "/getAll")
+    public List<String> getProviders() {
+        return getNewsSources().getBody();
+    }
+
+    // /**
+    // * Public method for requesting a specific number of providers from the
+    // database
+    // * @param s used for skipping a number of rows from the database
+    // * @param c how many rows are necessary
+    // * @return a List with the ProviderEntity requested
+    // */
+    @GetMapping(path = "providers/getInterval")
+    public List<String> getInterval(@RequestParam(name = "skip", required = true) int skip,
+            @RequestParam(name = "count", required = true) int count) {
+        List<String> newsProvider = new ArrayList<String>();
+        List<String> list = getNewsSources().getBody();
+        int i = skip;
+
+        while (i < count + skip) {
+            String name = list.get(i);
+            newsProvider.add(name);
+            i++;
+        }
+
+        return newsProvider;
+    }
+
+    // /**
+    // * Public method for requesting the total number of providers enlisted in the
+    // database
+    // * @return the number of providers as a IntWrapper class
+    // */
+
+    @GetMapping(path = "/getCount")
+    public IntWrapper getCount() {
+        int i = getNewsSources().getBody().size();
+        IntWrapper iNew = new IntWrapper(i);
+        return iNew;
+    }
+
+    // /**
+    // * Public method for requesting the number of providers containing the
+    // provided string
+    // * @param query used for providing the string to be searched within the names
+    // of the providers
+    // * @return an IntWrapper containing the number of providers
+    // */
+    @GetMapping(path = "/searchCount")
+    public IntWrapper searchCount(@RequestParam(name = "query", required = true) String query) {
+
+        Integer number = 0;
+        List<String> list = getNewsSources().getBody();
+        for (String i : list) {
+            if (query == i)
+                number++;
+
+        }
+        IntWrapper iNew = new IntWrapper(number);
+        return iNew;
+    }
+
+    // /**
+    // * Public method for requesting a list of providers containing the provided
+    // string
+    // * @param query used for providing the string to be searched within the names
+    // of the providers
+    // * @param s used for skipping a number of rows from the database
+    // * @param c how many rows are necessary
+    // * @return a List with the ProviderEntity requested
+    // */
+
+    @GetMapping(path = "/search")
+    public List<String> search(@RequestParam(name = "query", required = true) String query,
+            @RequestParam(name = "skip", required = true) int skip,
+            @RequestParam(name = "count", required = true) int count) {
+
+        List<String> filteredList = new ArrayList<String>();
+
+        Integer number = 0;
+        List<String> list = getNewsSources().getBody();
+        for (String i : list) {
+            if (i.indexOf(query) != -1) {
+                number++;
+                if (number > skip && number <= skip + count)
+                    filteredList.add(i);
+            }
+
+        }
+
+        return filteredList;
+    }
+
 }
