@@ -15,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.ingestion.management.model.News;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.junit.jupiter.api.Assertions.*;
@@ -103,5 +100,61 @@ public class NewsControllerTest {
 
         assertEquals(200, actual.getStatusCode().value() );
         assertNotNull(actual.getBody());
+    }
+
+    @Test
+    public void shouldReturnFilteredListOFNews() {
+        repo = mock(NewsRepository.class);
+        controller = new NewsController(repo, newsService);
+
+        when(repo.findAll()).thenReturn(Collections.emptyList());
+
+        List<String> actual = controller.getInterval(3, 2);
+
+        assertEquals(2, actual.size());
+    }
+
+    @Test
+    public void shouldReturnFilteredNews() {
+        repo = mock(NewsRepository.class);
+        controller = new NewsController(repo, newsService);
+
+        when(repo.findAll()).thenReturn(Collections.emptyList());
+
+        ResponseEntity<List<News>> response = controller.getAllNews("source");
+
+        assertEquals(200, response.getStatusCode().value());
+    }
+
+    @Test
+    public void shouldReturnAllNews() {
+        repo = mock(NewsRepository.class);
+        controller = new NewsController(repo, newsService);
+
+        when(repo.findAll()).thenReturn(Collections.emptyList());
+
+        ResponseEntity<List<News>> response = controller.getAll();
+
+        assertEquals(200, response.getStatusCode().value());
+    }
+
+    @Test
+    public void shouldSearchCount() {
+        repo = mock(NewsRepository.class);
+        controller = new NewsController(repo, newsService);
+
+        when(repo.findAll()).thenReturn(Collections.emptyList());
+
+        controller.searchCount("string");
+    }
+
+    @Test
+    public void shouldSearch() {
+        repo = mock(NewsRepository.class);
+        controller = new NewsController(repo, newsService);
+
+        when(repo.findAll()).thenReturn(Collections.emptyList());
+
+        controller.search("string", 3, 2);
     }
 }
