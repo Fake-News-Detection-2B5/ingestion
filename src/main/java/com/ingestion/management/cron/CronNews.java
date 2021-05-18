@@ -28,7 +28,7 @@ public class CronNews {
 
     }
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */30 * * * *")
     public void callBBCNews() throws IOException {
         // call BBC news
         BBCNews bbcNews = new BBCNews();
@@ -38,10 +38,10 @@ public class CronNews {
         News[] newsBBC = gson.fromJson(bbcnews, News[].class);
 
         this.newsRepository.saveAll(Arrays.asList(newsBBC));
-//        System.out.println("BBCNews---:"+ new Date());
+        System.out.println("BBCNews---:"+ new Date());
     }
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */30 * * * *")
     public void callHuffingtonPost() throws IOException {
         HuffingtonPost huffingtonNews = new HuffingtonPost();
         String huffintonnews = huffingtonNews.scrapMainPage();
@@ -50,10 +50,10 @@ public class CronNews {
         News[] newsHuffinton = gson.fromJson(huffintonnews, News[].class);
 
         this.newsRepository.saveAll(Arrays.asList(newsHuffinton));
-//        System.out.println("Huffington:"+ new Date());
+        System.out.println("Huffington:"+ new Date());
     }
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */30 * * * *")
     public void callNY() throws IOException {
         NewYorkPost nyNews = new NewYorkPost();
         String nynews = nyNews.scrapMainPage();
@@ -62,10 +62,10 @@ public class CronNews {
         News[] newsNY = gson.fromJson(nynews, News[].class);
 
         this.newsRepository.saveAll(Arrays.asList(newsNY));
-//        System.out.println("NewYork---:"+ new Date());
+        System.out.println("NewYork---:"+ new Date());
     }
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */30 * * * *")
     public void callNBC() throws IOException, InterruptedException {
         NBCNews nbcNews = new NBCNews();
         String nbcnews = nbcNews.scrapMainPage();
@@ -74,10 +74,10 @@ public class CronNews {
         News[] newsNBC = gson.fromJson(nbcnews, News[].class);
 
         this.newsRepository.saveAll(Arrays.asList(newsNBC));
-//        System.out.println("NBCNews---:"+ new Date());
+        System.out.println("NBCNews---:"+ new Date());
     }
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */30 * * * *")
     public void callBuzzFeed() throws IOException {
         BuzzFeed bfNews = new BuzzFeed();
         String bfnews = bfNews.scrapMainPage();
@@ -86,10 +86,10 @@ public class CronNews {
         News[] newsBF = gson.fromJson(bfnews, News[].class);
 
         this.newsRepository.saveAll(Arrays.asList(newsBF));
-//        System.out.println("BuzzFeed--:" + new Date());
+        System.out.println("BuzzFeed--:" + new Date());
     }
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */30 * * * *")
     public void callDailyMail() throws IOException {
         DailyMail dmNews = new DailyMail();
         String dmnews = dmNews.scrapMainPage();
@@ -98,6 +98,6 @@ public class CronNews {
         News[] newsDM = gson.fromJson(dmnews, News[].class);
 
         this.newsRepository.saveAll(Arrays.asList(newsDM));
-//        System.out.println("DailyMail--:" + new Date());
+        System.out.println("DailyMail--:" + new Date());
     }
 }
