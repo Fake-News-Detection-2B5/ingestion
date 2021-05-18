@@ -88,4 +88,16 @@ public class CronNews {
         this.newsRepository.saveAll(Arrays.asList(newsBF));
 //        System.out.println("BuzzFeed--:" + new Date());
     }
+
+    @Scheduled(cron = "0 */5 * * * *")
+    public void callDailyMail() throws IOException {
+        DailyMail dmNews = new DailyMail();
+        String dmnews = dmNews.scrapMainPage();
+
+        Gson gson = new Gson();
+        News[] newsDM = gson.fromJson(dmnews, News[].class);
+
+        this.newsRepository.saveAll(Arrays.asList(newsDM));
+//        System.out.println("DailyMail--:" + new Date());
+    }
 }
