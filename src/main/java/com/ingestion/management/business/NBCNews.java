@@ -10,7 +10,11 @@ import org.jsoup.select.Elements;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class NBCNews {
     public ArrayList<String> urlList = new ArrayList<>();
@@ -65,6 +69,16 @@ public class NBCNews {
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", link);
             newsDetails.put("description", JSONValue.escape(newsBody.toString()));
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+            Date convertedDate;
+            try {
+                convertedDate = format.parse(newsDate);
+                newsDate = formatted.format(convertedDate);
+            } catch (ParseException e) {
+                newsDate = "Unknown";
+            }
+
             newsDetails.put("postDate", newsDate);
             newsDetails.put("thumbnail", newsThumbnail);
 

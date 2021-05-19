@@ -9,7 +9,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class NewYorkPost {
     public ArrayList<String> urlList = new ArrayList<>();
@@ -60,7 +64,20 @@ public class NewYorkPost {
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", link);
             newsDetails.put("description", JSONValue.escape(newsBody.toString()));
-            newsDetails.put("date", newsDate);
+
+            if(newsDate.contains("| Updated"))
+                newsDate = newsDate.split("\\| Updated")[0];
+            SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy '|' hh:mma");
+            SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+            Date convertedDate;
+            try {
+                convertedDate = format.parse(newsDate);
+                newsDate = formatted.format(convertedDate);
+            } catch (ParseException e) {
+                newsDate = "Unknown";
+            }
+
+            newsDetails.put("postDate", newsDate);
             newsDetails.put("thumbnail", newsThumbnail);
             urlList.add(link);
             return newsDetails;

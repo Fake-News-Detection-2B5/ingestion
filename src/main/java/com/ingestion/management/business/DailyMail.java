@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class DailyMail {
     public ArrayList<String> urlList = new ArrayList<>();
@@ -58,15 +59,17 @@ public class DailyMail {
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", newsUrl);
             newsDetails.put("description", JSONValue.escape(newsBody.toString()));
+            SimpleDateFormat format = new SimpleDateFormat("hh:mm 'BST', dd MMM yyyy");
             SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-            Date date;
+            Date convertedDate;
             try {
-                date = formatted.parse(newsDate);
+                convertedDate = format.parse(newsDate);
+                newsDate = formatted.format(convertedDate);
             } catch (ParseException e) {
-                date = null;
-                e.printStackTrace();
+                newsDate = "Unknown";
             }
-            newsDetails.put("postDate", date);
+
+            newsDetails.put("postDate", newsDate);
             newsDetails.put("thumbnail", newsThumbnail);
             return newsDetails;
         } else
