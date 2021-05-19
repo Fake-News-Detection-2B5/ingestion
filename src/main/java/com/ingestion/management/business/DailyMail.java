@@ -62,14 +62,16 @@ public class DailyMail {
             SimpleDateFormat format = new SimpleDateFormat("hh:mm 'BST', dd MMM yyyy");
             SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             Date convertedDate;
+            Date date = null;
             try {
                 convertedDate = format.parse(newsDate);
-                newsDate = formatted.format(convertedDate);
+                date = formatted.parse(String.valueOf(convertedDate));
+
             } catch (ParseException e) {
                 newsDate = "Unknown";
             }
 
-            newsDetails.put("postDate", newsDate);
+            newsDetails.put("postDate", date);
             newsDetails.put("thumbnail", newsThumbnail);
             return newsDetails;
         } else

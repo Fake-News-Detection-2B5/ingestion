@@ -85,14 +85,16 @@ public class BuzzFeed {
                 format = new SimpleDateFormat("'Posted on' MMM dd, yyyy, 'at' hh:mm 'p.m. ET'");
             SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             Date convertedDate;
+            Date date = null;
             try {
                 convertedDate = format.parse(newsDate);
-                newsDate = formatted.format(convertedDate);
+                date = formatted.parse(String.valueOf(convertedDate));
+
             } catch (ParseException e) {
                 newsDate = "Unknown";
             }
 
-            newsDetails.put("postDate", newsDate);
+            newsDetails.put("postDate", date);
             newsDetails.put("thumbnail", newsThumbnail);
 
             urlList.add(url);
