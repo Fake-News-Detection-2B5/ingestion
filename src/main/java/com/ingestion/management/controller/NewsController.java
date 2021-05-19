@@ -200,6 +200,7 @@ public class NewsController {
 
     // return newsProvider;
     // }
+    // pls work now, ty
 
     @GetMapping(path = "providers/getInterval")
     public List<ProviderEntity> getInterval(@RequestParam(name = "skip", required = true) int skip,
