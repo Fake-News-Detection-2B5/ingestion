@@ -9,7 +9,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DailyMail {
     public ArrayList<String> urlList = new ArrayList<>();
@@ -24,13 +27,11 @@ public class DailyMail {
         String newsThumbnail = "Unknown";
         String newsUrl = "https://www.dailymail.co.uk" + link;
 
-
         Elements newsDateDiv = doc.getElementsByClass("article-timestamp article-timestamp-published");
         if (newsDateDiv.size() > 0) {
             String date = newsDateDiv.get(0).getElementsByTag("time").text();
             newsDate = date;
         }
-
 
         Elements newsAuthorDiv = doc.getElementsByClass("author-section byline-plain");
         if (newsAuthorDiv.size() > 0) {
@@ -38,11 +39,11 @@ public class DailyMail {
             newsAuthor = authName;
         }
 
-
         Elements newsThumbnailImg = doc.getElementsByClass("mol-img");
         if (newsThumbnailImg.size() > 0) {
             if (newsThumbnailImg.get(0).getElementsByTag("img").size() > 0) {
-                String thumbnail = newsThumbnailImg.get(0).getElementsByTag("img").get(0).getElementsByAttribute("data-src").attr("data-src");
+                String thumbnail = newsThumbnailImg.get(0).getElementsByTag("img").get(0)
+                        .getElementsByAttribute("data-src").attr("data-src");
                 newsThumbnail = thumbnail;
             }
         }
@@ -57,7 +58,15 @@ public class DailyMail {
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", newsUrl);
             newsDetails.put("description", JSONValue.escape(newsBody.toString()));
-            newsDetails.put("date", newsDate);
+            SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+            Date date;
+            try {
+                date = formatted.parse(newsDate);
+            } catch (ParseException e) {
+                date = null;
+                e.printStackTrace();
+            }
+            newsDetails.put("postDate", date);
             newsDetails.put("thumbnail", newsThumbnail);
             return newsDetails;
         } else
@@ -67,7 +76,8 @@ public class DailyMail {
     public String scrapMainPage() throws IOException {
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
-        String[] newsCategories = {"home/index.html", "news/index.html", "ushome/index.html", "sport/index.html", "tvshowbiz/index.html", "health/index.html", "sciencetech/index.html", "money/index.html"};
+        String[] newsCategories = { "home/index.html", "news/index.html", "ushome/index.html", "sport/index.html",
+                "tvshowbiz/index.html", "health/index.html", "sciencetech/index.html", "money/index.html" };
 
         for (String category : newsCategories) {
             Document doc = Jsoup.connect("https://www.dailymail.co.uk/" + category).userAgent("Mozilla").get();

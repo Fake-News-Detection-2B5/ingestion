@@ -9,7 +9,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class BuzzFeed {
     public ArrayList<String> urlList = new ArrayList<>();
@@ -67,13 +70,21 @@ public class BuzzFeed {
     }
 
     private JSONObject getJsonObject(String url, JSONObject newsDetails, String newsTitle, String newsAuthor,
-                                     StringBuilder newsBody, String newsDate, String newsThumbnail) {
+            StringBuilder newsBody, String newsDate, String newsThumbnail) {
         if (newsBody.length() != 0 && !urlList.contains(url)) {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", url);
             newsDetails.put("description", JSONValue.escape(newsBody.toString()));
-            newsDetails.put("postDate", newsDate);
+            SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+            Date date;
+            try {
+                date = formatted.parse(newsDate);
+            } catch (ParseException e) {
+                date = null;
+                e.printStackTrace();
+            }
+            newsDetails.put("postDate", date);
             newsDetails.put("thumbnail", newsThumbnail);
 
             urlList.add(url);
@@ -86,9 +97,9 @@ public class BuzzFeed {
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
 
-        String[] newsCategories = {"", "section/arts-entertainment", "section/books", "section/culture",
+        String[] newsCategories = { "", "section/arts-entertainment", "section/books", "section/culture",
                 "section/inequality", "section/jpg", "section/lgbtq", "collection/opinion", "section/politics",
-                "section/reader", "section/science", "section/tech", "section/world"};
+                "section/reader", "section/science", "section/tech", "section/world" };
         for (String category : newsCategories) {
             Document doc = Jsoup.connect("https://www.buzzfeednews.com/" + category).userAgent("Mozilla").get();
 

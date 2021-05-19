@@ -12,7 +12,10 @@ import org.jsoup.select.Elements;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class BBCNews {
     public ArrayList<String> urlList = new ArrayList<>();
@@ -65,13 +68,21 @@ public class BBCNews {
     }
 
     private JSONObject getJsonObject(String url, JSONObject newsDetails, String newsTitle, String newsAuthor,
-                                     StringBuilder newsBody, String newsDate, String newsThumbnail) {
+            StringBuilder newsBody, String newsDate, String newsThumbnail) {
         if (newsBody.length() != 0 && !urlList.contains(url)) {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", url);
             newsDetails.put("description", JSONValue.escape(newsBody.toString()));
-            newsDetails.put("postDate", newsDate);
+            SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+            Date date;
+            try {
+                date = formatted.parse(newsDate);
+            } catch (ParseException e) {
+                date = null;
+                e.printStackTrace();
+            }
+            newsDetails.put("postDate", date);
             newsDetails.put("thumbnail", newsThumbnail);
 
             urlList.add(url);
@@ -84,8 +95,8 @@ public class BBCNews {
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
 
-        String[] newsCategories = {"", "coronavirus", "world", "uk", "business", "technology",
-                "science_and_environment", "entertainment_and_arts"};
+        String[] newsCategories = { "", "coronavirus", "world", "uk", "business", "technology",
+                "science_and_environment", "entertainment_and_arts" };
 
         for (String category : newsCategories) {
 
