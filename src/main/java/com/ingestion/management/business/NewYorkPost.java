@@ -65,21 +65,18 @@ public class NewYorkPost {
             newsDetails.put("url", link);
             newsDetails.put("description", JSONValue.escape(newsBody.toString()));
 
-            if(newsDate.contains("| Updated"))
+            if (newsDate.contains("| Updated"))
                 newsDate = newsDate.split("\\| Updated")[0];
             SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy '|' hh:mma");
             SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             Date convertedDate;
-            Date date = null;
             try {
                 convertedDate = format.parse(newsDate);
-                date = formatted.parse(String.valueOf(convertedDate));
-
             } catch (ParseException e) {
-                newsDate = "Unknown";
+                convertedDate = null;
             }
 
-            newsDetails.put("postDate", date);
+            newsDetails.put("postDate", convertedDate);
             newsDetails.put("thumbnail", newsThumbnail);
             urlList.add(link);
             return newsDetails;

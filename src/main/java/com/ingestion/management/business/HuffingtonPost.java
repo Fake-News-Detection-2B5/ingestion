@@ -62,16 +62,13 @@ public class HuffingtonPost {
             SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm a 'ET'");
             SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             Date convertedDate;
-            Date date = null;
             try {
                 convertedDate = format.parse(newsDate);
-                date = formatted.parse(String.valueOf(convertedDate));
-
             } catch (ParseException e) {
-                newsDate = "Unknown";
+                convertedDate = null;
             }
 
-            newsDetails.put("postDate", date);
+            newsDetails.put("postDate", convertedDate);
             newsDetails.put("thumbnail", newsThumbnail);
             return newsDetails;
         } else
