@@ -19,7 +19,8 @@ import java.util.logging.Logger;
 @Component
 public class CronNews {
 
-    //private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(CronNewsTask.class);
+    // private static final Logger LOGGER = (Logger)
+    // LoggerFactory.getLogger(CronNewsTask.class);
 
     private NewsRepository newsRepository;
 
@@ -28,7 +29,7 @@ public class CronNews {
 
     }
 
-    @Scheduled(cron = "0 */30 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void callBBCNews() throws IOException {
         // call BBC news
         BBCNews bbcNews = new BBCNews();
@@ -38,7 +39,7 @@ public class CronNews {
         News[] newsBBC = gson.fromJson(bbcnews, News[].class);
 
         this.newsRepository.saveAll(Arrays.asList(newsBBC));
-        System.out.println("BBCNews---:"+ new Date());
+        System.out.println("BBCNews---:" + new Date());
     }
 
     @Scheduled(cron = "0 */30 * * * *")
@@ -50,7 +51,7 @@ public class CronNews {
         News[] newsHuffinton = gson.fromJson(huffintonnews, News[].class);
 
         this.newsRepository.saveAll(Arrays.asList(newsHuffinton));
-        System.out.println("Huffington:"+ new Date());
+        System.out.println("Huffington:" + new Date());
     }
 
     @Scheduled(cron = "0 */30 * * * *")
@@ -62,7 +63,7 @@ public class CronNews {
         News[] newsNY = gson.fromJson(nynews, News[].class);
 
         this.newsRepository.saveAll(Arrays.asList(newsNY));
-        System.out.println("NewYork---:"+ new Date());
+        System.out.println("NewYork---:" + new Date());
     }
 
     @Scheduled(cron = "0 */30 * * * *")
@@ -74,7 +75,7 @@ public class CronNews {
         News[] newsNBC = gson.fromJson(nbcnews, News[].class);
 
         this.newsRepository.saveAll(Arrays.asList(newsNBC));
-        System.out.println("NBCNews---:"+ new Date());
+        System.out.println("NBCNews---:" + new Date());
     }
 
     @Scheduled(cron = "0 */30 * * * *")
