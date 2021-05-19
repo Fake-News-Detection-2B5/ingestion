@@ -10,6 +10,7 @@ import com.ingestion.management.model.IntWrapper;
 //import com.ingestion.management.business.BuzzFeedController;
 //import com.ingestion.management.business.NBCNewsController;
 import com.ingestion.management.model.News;
+import com.ingestion.management.model.ProviderEntity;
 import com.ingestion.management.repository.NewsRepository;
 import com.ingestion.management.service.INewsService;
 
@@ -112,17 +113,17 @@ public class NewsController {
         // int i = 0;
 
         // for (News news : list) {
-        //     if (i == (count + skip)) // numerotarea incepe de la 0..
-        //     {
-        //         break;
-        //     }
-        //     if (i >= skip) {
-        //         filteredList.add(news);
-        //     }
-        //     i++;
+        // if (i == (count + skip)) // numerotarea incepe de la 0..
+        // {
+        // break;
+        // }
+        // if (i >= skip) {
+        // filteredList.add(news);
+        // }
+        // i++;
         // }
 
-        //return filteredList;
+        // return filteredList;
         return null;
     }
 
@@ -183,16 +184,33 @@ public class NewsController {
     // * @param c how many rows are necessary
     // * @return a List with the ProviderEntity requested
     // */
+    // @GetMapping(path = "providers/getInterval")
+    // public List<String> getInterval(@RequestParam(name = "skip", required = true)
+    // int skip,
+    // @RequestParam(name = "count", required = true) int count) {
+    // List<String> newsProvider = new ArrayList<String>();
+    // List<String> list = getNewsSources().getBody();
+    // int i = skip;
+
+    // while (i < count + skip) {
+    // String name = list.get(i);
+    // newsProvider.add(name);
+    // i++;
+    // }
+
+    // return newsProvider;
+    // }
+
     @GetMapping(path = "providers/getInterval")
-    public List<String> getInterval(@RequestParam(name = "skip", required = true) int skip,
+    public List<ProviderEntity> getInterval(@RequestParam(name = "skip", required = true) int skip,
             @RequestParam(name = "count", required = true) int count) {
-        List<String> newsProvider = new ArrayList<String>();
+        List<ProviderEntity> newsProvider = new ArrayList<>();
         List<String> list = getNewsSources().getBody();
         int i = skip;
 
         while (i < count + skip) {
             String name = list.get(i);
-            newsProvider.add(name);
+            newsProvider.add(new ProviderEntity(i, name, 0, "no-avatar"));
             i++;
         }
 
