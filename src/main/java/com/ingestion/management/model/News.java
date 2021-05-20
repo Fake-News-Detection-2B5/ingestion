@@ -17,7 +17,7 @@ public class News {
     private String author;
     private String url;
     private String description;
-    private Date postDate;
+    private String postDate;
     private String thumbnail;
 
     public News() {
@@ -48,11 +48,11 @@ public class News {
         this.description = description;
     }
 
-    public Date getPostDate() {
+    public String getPostDate() {
         return postDate;
     }
 
-    public void setPostDate(Date postDate) {
+    public void setPostDate(String postDate) {
         this.postDate = postDate;
     }
 

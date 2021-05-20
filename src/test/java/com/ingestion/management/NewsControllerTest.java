@@ -51,7 +51,8 @@ public class NewsControllerTest {
         news.setDescription("");
         news.setUrl("");
         news.setAuthor("");
-        news.setPostDate(new Date());
+        news.setPostDate("");
+//        news.setPostDate(new Date());
         news.setThumbnail("");
         when(repo.save(news)).thenReturn(news);
         ResponseEntity<News> obj = controller.create(news);

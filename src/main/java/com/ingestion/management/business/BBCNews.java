@@ -79,13 +79,17 @@ public class BBCNews {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             Date convertedDate;
+            String convertedDate2;
             try {
                 convertedDate = format.parse(newsDate);
+                convertedDate2 = formatted.format(convertedDate);
+                System.out.println(convertedDate2);
             } catch (ParseException e) {
-                convertedDate = null;
+                convertedDate2 = "Unknown";
+                e.printStackTrace();
             }
 
-            newsDetails.put("postDate", convertedDate);
+            newsDetails.put("postDate", convertedDate2);
             newsDetails.put("thumbnail", newsThumbnail);
 
             urlList.add(url);
