@@ -8,15 +8,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-//import io.swagger.v3.core.util.Json;
-
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class BBCNews {
     public ArrayList<String> urlList = new ArrayList<>();
@@ -69,7 +65,7 @@ public class BBCNews {
     }
 
     private JSONObject getJsonObject(String url, JSONObject newsDetails, String newsTitle, String newsAuthor,
-            StringBuilder newsBody, String newsDate, String newsThumbnail) {
+                                     StringBuilder newsBody, String newsDate, String newsThumbnail) {
         if (newsBody.length() != 0 && !urlList.contains(url)) {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
@@ -102,8 +98,8 @@ public class BBCNews {
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
 
-        String[] newsCategories = { "", "coronavirus", "world", "uk", "business", "technology",
-                "science_and_environment", "entertainment_and_arts" };
+        String[] newsCategories = {"", "coronavirus", "world", "uk", "business", "technology",
+                "science_and_environment", "entertainment_and_arts"};
 
         for (String category : newsCategories) {
 
