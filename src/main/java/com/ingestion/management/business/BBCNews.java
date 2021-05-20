@@ -69,7 +69,7 @@ public class BBCNews {
     }
 
     private JSONObject getJsonObject(String url, JSONObject newsDetails, String newsTitle, String newsAuthor,
-                                     StringBuilder newsBody, String newsDate, String newsThumbnail) {
+            StringBuilder newsBody, String newsDate, String newsThumbnail) {
         if (newsBody.length() != 0 && !urlList.contains(url)) {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
@@ -98,8 +98,8 @@ public class BBCNews {
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
 
-        String[] newsCategories = {"", "coronavirus", "world", "uk", "business", "technology",
-                "science_and_environment", "entertainment_and_arts"};
+        String[] newsCategories = { "", "coronavirus", "world", "uk", "business", "technology",
+                "science_and_environment", "entertainment_and_arts" };
 
         for (String category : newsCategories) {
 
