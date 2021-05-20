@@ -72,13 +72,15 @@ public class NBCNews {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             Date convertedDate;
+            String convertedDate2;
             try {
                 convertedDate = format.parse(newsDate);
+                convertedDate2 = formatted.format(convertedDate);
             } catch (ParseException e) {
-                convertedDate = null;
+                convertedDate2 = "Unknown";
             }
 
-            newsDetails.put("postDate", convertedDate);
+            newsDetails.put("postDate", convertedDate2);
             newsDetails.put("thumbnail", newsThumbnail);
 
             urlList.add(link);

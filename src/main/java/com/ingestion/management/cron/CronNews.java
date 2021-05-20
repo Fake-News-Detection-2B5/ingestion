@@ -42,7 +42,7 @@ public class CronNews {
         System.out.println("BBCNews---:" + new Date());
     }
 
-    @Scheduled(cron = "0 */30 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void callHuffingtonPost() throws IOException {
         HuffingtonPost huffingtonNews = new HuffingtonPost();
         String huffintonnews = huffingtonNews.scrapMainPage();
@@ -54,7 +54,7 @@ public class CronNews {
         System.out.println("Huffington:" + new Date());
     }
 
-    @Scheduled(cron = "0 */30 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void callNY() throws IOException {
         NewYorkPost nyNews = new NewYorkPost();
         String nynews = nyNews.scrapMainPage();
@@ -66,7 +66,7 @@ public class CronNews {
         System.out.println("NewYork---:" + new Date());
     }
 
-    @Scheduled(cron = "0 */30 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void callNBC() throws IOException, InterruptedException {
         NBCNews nbcNews = new NBCNews();
         String nbcnews = nbcNews.scrapMainPage();
@@ -78,7 +78,7 @@ public class CronNews {
         System.out.println("NBCNews---:" + new Date());
     }
 
-    @Scheduled(cron = "0 */30 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void callBuzzFeed() throws IOException {
         BuzzFeed bfNews = new BuzzFeed();
         String bfnews = bfNews.scrapMainPage();
@@ -90,7 +90,7 @@ public class CronNews {
         System.out.println("BuzzFeed--:" + new Date());
     }
 
-    @Scheduled(cron = "0 */30 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void callDailyMail() throws IOException {
         DailyMail dmNews = new DailyMail();
         String dmnews = dmNews.scrapMainPage();

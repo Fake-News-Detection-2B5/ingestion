@@ -81,7 +81,6 @@ public class BBCNews {
                 convertedDate2 = formatted.format(convertedDate);
             } catch (ParseException e) {
                 convertedDate2 = "Unknown";
-                e.printStackTrace();
             }
 
             newsDetails.put("postDate", convertedDate2);

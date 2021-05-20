@@ -70,13 +70,15 @@ public class NewYorkPost {
             SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy '|' hh:mma");
             SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             Date convertedDate;
+            String convertedDate2;
             try {
                 convertedDate = format.parse(newsDate);
+                convertedDate2 = formatted.format(convertedDate);
             } catch (ParseException e) {
-                convertedDate = null;
+                convertedDate2 = "Unknown";
             }
 
-            newsDetails.put("postDate", convertedDate);
+            newsDetails.put("postDate", convertedDate2);
             newsDetails.put("thumbnail", newsThumbnail);
             urlList.add(link);
             return newsDetails;
