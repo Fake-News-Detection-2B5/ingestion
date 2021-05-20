@@ -1,13 +1,9 @@
 package com.ingestion.management;
 
-import com.ingestion.management.cron.CronNews;
-import com.ingestion.management.repository.NewsRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
 
