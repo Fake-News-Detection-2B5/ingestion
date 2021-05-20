@@ -10,11 +10,11 @@ public class BBCNewsTest {
 
     @Test
     public void shouldScrapWithoutErrors() {
-        assertThatCode(() -> controller.scrapMainPage()).doesNotThrowAnyException();
+        assertThatCode(() -> controller.scrapMainPage("19-May-2021 23:10:35")).doesNotThrowAnyException();
     }
 
     @Test
     public void scrapWithoutErrorsPageContent() {
-        assertThatCode(() -> controller.scrapPageContent("/news")).doesNotThrowAnyException();
+        assertThatCode(() -> controller.scrapPageContent("/news", "19-May-2021 23:10:35")).doesNotThrowAnyException();
     }
 }

@@ -17,7 +17,7 @@ import java.util.Date;
 public class BBCNews {
     public ArrayList<String> urlList = new ArrayList<>();
 
-    public JSONObject scrapPageContent(String link) throws IOException {
+    public JSONObject scrapPageContent(String link, String lastDate) throws IOException, ParseException {
 
         JSONObject newsDetails = new JSONObject();
         String url = "https://www.bbc.com" + link;
@@ -61,11 +61,11 @@ public class BBCNews {
             }
         }
 
-        return getJsonObject(url, newsDetails, newsTitle, newsAuthor, newsBody, newsDate, newsThumbnail);
+        return getJsonObject(url, newsDetails, newsTitle, newsAuthor, newsBody, newsDate, newsThumbnail, lastDate);
     }
 
     private JSONObject getJsonObject(String url, JSONObject newsDetails, String newsTitle, String newsAuthor,
-                                     StringBuilder newsBody, String newsDate, String newsThumbnail) {
+                                     StringBuilder newsBody, String newsDate, String newsThumbnail, String lastDate) throws ParseException {
         if (newsBody.length() != 0 && !urlList.contains(url)) {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
@@ -86,13 +86,16 @@ public class BBCNews {
             newsDetails.put("postDate", convertedDate2);
             newsDetails.put("thumbnail", newsThumbnail);
 
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             urlList.add(url);
-            return newsDetails;
+            if (sdf.parse(lastDate).before(sdf.parse(convertedDate2)))
+                return newsDetails;
+            else return null;
         } else
             return null;
     }
 
-    public String scrapMainPage() throws IOException {
+    public String scrapMainPage(String lastDate) throws IOException, ParseException {
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
 
@@ -111,7 +114,7 @@ public class BBCNews {
 
                 if (linkHref.matches("(.*)/(.*)[(0-9)]+")) {
                     if (!linkHref.contains("http")) {
-                        tempNews = scrapPageContent(linkHref);
+                        tempNews = scrapPageContent(linkHref, lastDate);
                         if (tempNews != null)
                             newsList.add(tempNews);
                     }
