@@ -29,7 +29,7 @@ public class CronNews {
 
     }
 
-    @Scheduled(cron = "0 /5 * * * *")
+    @Scheduled(cron = "0 0/5 * * * *")
     public void callBBCNews() throws IOException {
         // call BBC news
         BBCNews bbcNews = new BBCNews();
@@ -42,7 +42,7 @@ public class CronNews {
         System.out.println("BBCNews---:" + new Date());
     }
 
-    @Scheduled(cron = "0 */2 * * * *")
+    @Scheduled(cron = "0 */30 * * * *")
     public void callHuffingtonPost() throws IOException {
         HuffingtonPost huffingtonNews = new HuffingtonPost();
         String huffintonnews = huffingtonNews.scrapMainPage();
