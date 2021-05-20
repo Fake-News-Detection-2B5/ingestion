@@ -79,7 +79,6 @@ public class BBCNews {
             try {
                 convertedDate = format.parse(newsDate);
                 convertedDate2 = formatted.format(convertedDate);
-                System.out.println(convertedDate2);
             } catch (ParseException e) {
                 convertedDate2 = "Unknown";
                 e.printStackTrace();
