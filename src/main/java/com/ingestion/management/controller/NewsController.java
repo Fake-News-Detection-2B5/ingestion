@@ -20,11 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 //import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 //import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
 
 @RestController
 @CrossOrigin(origins = "")
@@ -173,8 +171,15 @@ public class NewsController {
     // * @return a List with every ProviderEntity from the database
     // */
     @GetMapping(path = "/getAll")
-    public List<String> getProviders() {
-        return getNewsSources().getBody();
+    public List<ProviderEntity> getProviders() {
+        List<String> providerStringList = getNewsSources().getBody();
+
+        assert providerStringList != null;
+        List<ProviderEntity> providerCorrectList = new ArrayList<>(providerStringList.size());
+        for (int i = 0; i < providerStringList.size(); ++i) {
+            providerCorrectList.add(i, new ProviderEntity(providerStringList.get(i), 0, "no-avatar"));
+        }
+        return providerCorrectList;
     }
 
     // /**
@@ -207,9 +212,11 @@ public class NewsController {
             @RequestParam(name = "count", required = true) int count) {
         List<ProviderEntity> newsProvider = new ArrayList<>();
         List<String> list = getNewsSources().getBody();
+        if (list == null) return null;
         int i = skip;
 
         while (i < count + skip) {
+            if (i >= list.size()) break;
             String name = list.get(i);
             newsProvider.add(new ProviderEntity(i, name, 0, "no-avatar"));
             i++;
@@ -231,25 +238,32 @@ public class NewsController {
         return iNew;
     }
 
-    // /**
-    // * Public method for requesting the number of providers containing the
-    // provided string
-    // * @param query used for providing the string to be searched within the names
-    // of the providers
-    // * @return an IntWrapper containing the number of providers
-    // */
+     /**
+     * Public method for requesting the number of providers containing the provided string
+     * @param query used for providing the string to be searched within the names of the providers
+     * @return an IntWrapper containing the number of providers
+     */
     @GetMapping(path = "/searchCount")
     public IntWrapper searchCount(@RequestParam(name = "query", required = true) String query) {
 
-        Integer number = 0;
+//        Integer number = 0;
+//        List<String> list = getNewsSources().getBody();
+//        for (String i : list) {
+//            if (query == i)
+//                number++;
+//
+//        }
+//        IntWrapper iNew = new IntWrapper(number);
+//        return iNew;
         List<String> list = getNewsSources().getBody();
-        for (String i : list) {
-            if (query == i)
-                number++;
+        if (list == null) return new IntWrapper(0);
 
+        int count = 0;
+        for (String i : list) {
+            if (i.contains(query))
+                count++;
         }
-        IntWrapper iNew = new IntWrapper(number);
-        return iNew;
+        return new IntWrapper(count);
     }
 
     // /**
