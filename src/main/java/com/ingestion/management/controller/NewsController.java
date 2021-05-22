@@ -180,7 +180,7 @@ public class NewsController {
         assert providerStringList != null;
         List<ProviderEntity> providerCorrectList = new ArrayList<>(providerStringList.size());
         for (int i = 0; i < providerStringList.size(); ++i) {
-            providerCorrectList.add(i, new ProviderEntity(providerStringList.get(i), 0, "no-avatar"));
+            providerCorrectList.add(i, new ProviderEntity(i, providerStringList.get(i), 0, "no-avatar"));
         }
         return providerCorrectList;
     }
