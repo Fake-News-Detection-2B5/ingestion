@@ -96,6 +96,9 @@ public class BuzzFeed {
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             urlList.add(url);
+            if(convertedDate2.equals("Unknown")) {
+                return null;
+            }
             if (sdf.parse(lastDate).before(sdf.parse(convertedDate2)))
                 return newsDetails;
             else return null;
