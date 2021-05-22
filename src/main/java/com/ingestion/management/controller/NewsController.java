@@ -106,25 +106,25 @@ public class NewsController {
     @GetMapping("/getInterval")
     public List<News> getInterval(@RequestParam(name = "skip", required = true) Integer skip,
             @RequestParam(name = "count", required = true) Integer count) {
-        // List<News> list = this.newsRepository.findAll();
+        List<News> list = this.newsRepository.findAll();
 
-        // List<News> filteredList = new ArrayList<>();
+        List<News> filteredList = new ArrayList<>();
 
-        // int i = 0;
+        int i = 0;
 
-        // for (News news : list) {
-        // if (i == (count + skip)) // numerotarea incepe de la 0..
-        // {
-        // break;
-        // }
-        // if (i >= skip) {
-        // filteredList.add(news);
-        // }
-        // i++;
-        // }
+        for (News news : list) {
+            if (i == (count + skip)) // numerotarea incepe de la 0..
+            {
+                break;
+            }
+            if (i >= skip) {
+                filteredList.add(news);
+            }
+            i++;
+        }
 
-        // return filteredList;
-        return null;
+        return filteredList;
+        // return null;
     }
 
     @GetMapping("/getIntervalByProvider")
@@ -268,8 +268,6 @@ public class NewsController {
                 count++;
         }
         return new IntWrapper(count);
-    }
-
     }
 
     // /**
