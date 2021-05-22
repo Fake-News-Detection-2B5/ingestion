@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 //import java.util.Arrays;
 
-
 @RestController
 @CrossOrigin(origins = "")
 @RequestMapping("v1/api/news")
@@ -212,11 +211,13 @@ public class NewsController {
             @RequestParam(name = "count", required = true) int count) {
         List<ProviderEntity> newsProvider = new ArrayList<>();
         List<String> list = getNewsSources().getBody();
-        if (list == null) return null;
+        if (list == null)
+            return null;
         int i = skip;
 
         while (i < count + skip) {
-            if (i >= list.size()) break;
+            if (i >= list.size())
+                break;
             String name = list.get(i);
             newsProvider.add(new ProviderEntity(i, name, 0, "no-avatar"));
             i++;
@@ -238,25 +239,29 @@ public class NewsController {
         return iNew;
     }
 
-     /**
-     * Public method for requesting the number of providers containing the provided string
-     * @param query used for providing the string to be searched within the names of the providers
+    /**
+     * Public method for requesting the number of providers containing the provided
+     * string
+     * 
+     * @param query used for providing the string to be searched within the names of
+     *              the providers
      * @return an IntWrapper containing the number of providers
      */
     @GetMapping(path = "/searchCount")
     public IntWrapper searchCount(@RequestParam(name = "query", required = true) String query) {
 
-//        Integer number = 0;
-//        List<String> list = getNewsSources().getBody();
-//        for (String i : list) {
-//            if (query == i)
-//                number++;
-//
-//        }
-//        IntWrapper iNew = new IntWrapper(number);
-//        return iNew;
+        // Integer number = 0;
+        // List<String> list = getNewsSources().getBody();
+        // for (String i : list) {
+        // if (query == i)
+        // number++;
+        //
+        // }
+        // IntWrapper iNew = new IntWrapper(number);
+        // return iNew;
         List<String> list = getNewsSources().getBody();
-        if (list == null) return new IntWrapper(0);
+        if (list == null)
+            return new IntWrapper(0);
 
         int count = 0;
         for (String i : list) {
