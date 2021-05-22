@@ -82,6 +82,9 @@ public class NBCNews {
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             urlList.add(link);
+            if(convertedDate2.equals("Unknown")) {
+                return null;
+            }
             if (sdf.parse(lastDate).before(sdf.parse(convertedDate2)))
                 return newsDetails;
             else return null;
