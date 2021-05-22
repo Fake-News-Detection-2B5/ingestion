@@ -73,6 +73,9 @@ public class DailyMail {
             newsDetails.put("postDate", convertedDate2);
             newsDetails.put("thumbnail", newsThumbnail);
 
+            if(convertedDate2.equals("Unknown")) {
+                return null;
+            }
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             if (sdf.parse(lastDate).before(sdf.parse(convertedDate2)))
                 return newsDetails;
