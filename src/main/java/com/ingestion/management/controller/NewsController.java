@@ -173,8 +173,16 @@ public class NewsController {
     // * @return a List with every ProviderEntity from the database
     // */
     @GetMapping(path = "/getAll")
-    public List<String> getProviders() {
-        return getNewsSources().getBody();
+    public List<ProviderEntity> getProviders() {
+        // return getNewsSources().getBody();
+        List<String> providerStringList = getNewsSources().getBody();
+
+        assert providerStringList != null;
+        List<ProviderEntity> providerCorrectList = new ArrayList<>(providerStringList.size());
+        for (int i = 0; i < providerStringList.size(); ++i) {
+            providerCorrectList.add(i, new ProviderEntity(providerStringList.get(i), 0, "no-avatar"));
+        }
+        return providerCorrectList;
     }
 
     // /**
@@ -241,15 +249,27 @@ public class NewsController {
     @GetMapping(path = "/searchCount")
     public IntWrapper searchCount(@RequestParam(name = "query", required = true) String query) {
 
-        Integer number = 0;
-        List<String> list = getNewsSources().getBody();
-        for (String i : list) {
-            if (query == i)
-                number++;
+        // Integer number = 0;
+        // List<String> list = getNewsSources().getBody();
+        // for (String i : list) {
+        // if (query == i)
+        // number++;
 
+        // }
+        // IntWrapper iNew = new IntWrapper(number);
+        // return iNew;
+        List<String> list = getNewsSources().getBody();
+        if (list == null)
+            return new IntWrapper(0);
+
+        int count = 0;
+        for (String i : list) {
+            if (i.contains(query))
+                count++;
         }
-        IntWrapper iNew = new IntWrapper(number);
-        return iNew;
+        return new IntWrapper(count);
+    }
+
     }
 
     // /**

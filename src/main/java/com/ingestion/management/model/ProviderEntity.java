@@ -20,6 +20,12 @@ public class ProviderEntity {
 
     }
 
+    public ProviderEntity(String name, double credibility, String avatar) {
+        this.name = name;
+        this.credibility = credibility;
+        this.avatar = avatar;
+    }
+
     public ProviderEntity(Integer id, String name, double credibility, String avatar) {
         this.id = id;
         this.name = name;

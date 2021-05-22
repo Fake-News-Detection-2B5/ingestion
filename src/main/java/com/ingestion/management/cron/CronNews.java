@@ -33,7 +33,7 @@ public class CronNews {
 
     }
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */30 * * * *")
     public void callBBCNews() throws IOException, ParseException {
         // call BBC news
         BBCNews bbcNews = new BBCNews();
