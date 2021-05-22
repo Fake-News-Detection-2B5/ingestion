@@ -270,7 +270,7 @@ public class NewsController {
         return new IntWrapper(count);
     }
 
-    }
+    
 
     // /**
     // * Public method for requesting a list of providers containing the provided
