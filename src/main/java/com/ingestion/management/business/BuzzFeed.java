@@ -13,12 +13,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class BuzzFeed {
     public ArrayList<String> urlList = new ArrayList<>();
 
-    public JSONObject scrapPageContent(String link) throws IOException {
+    public JSONObject scrapPageContent(String link, String lastDate) throws IOException, ParseException {
         JSONObject newsDetails = new JSONObject();
         String newsTitle;
         String newsAuthor = "Unknown";
@@ -66,12 +65,11 @@ public class BuzzFeed {
             }
         }
 
-        return getJsonObject(link, newsDetails, newsTitle, newsAuthor, newsBody, newsDate, newsThumbnail);
-
+        return getJsonObject(link, newsDetails, newsTitle, newsAuthor, newsBody, newsDate, newsThumbnail, lastDate);
     }
 
     private JSONObject getJsonObject(String url, JSONObject newsDetails, String newsTitle, String newsAuthor,
-                                     StringBuilder newsBody, String newsDate, String newsThumbnail) {
+                                     StringBuilder newsBody, String newsDate, String newsThumbnail, String lastDate) throws ParseException {
         if (newsBody.length() != 0 && !urlList.contains(url)) {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
@@ -96,13 +94,16 @@ public class BuzzFeed {
             newsDetails.put("postDate", convertedDate2);
             newsDetails.put("thumbnail", newsThumbnail);
 
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             urlList.add(url);
-            return newsDetails;
+            if (sdf.parse(lastDate).before(sdf.parse(convertedDate2)))
+                return newsDetails;
+            else return null;
         } else
             return null;
     }
 
-    public String scrapMainPage() throws IOException {
+    public String scrapMainPage(String lastDate) throws IOException, ParseException {
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
 
@@ -122,7 +123,7 @@ public class BuzzFeed {
                     for (Element link : links) {
                         String linkHref = link.attr("href");
                         if (linkHref.contains("https")) {
-                            tempNews = scrapPageContent(linkHref);
+                            tempNews = scrapPageContent(linkHref, lastDate);
                             if (tempNews != null) {
                                 newsList.add(tempNews);
                             }

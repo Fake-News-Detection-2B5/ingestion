@@ -10,11 +10,11 @@ public class NewYorkPostTest {
 
     @Test
     public void shouldScrapWithoutErrors() {
-        assertThatCode(() -> newYorkPost.scrapMainPage()).doesNotThrowAnyException();
+        assertThatCode(() -> newYorkPost.scrapMainPage("19-May-2021 23:10:35")).doesNotThrowAnyException();
     }
 
     @Test
     public void scrapWithoutErrorsPageContent() {
-        assertThatCode(() -> newYorkPost.scrapPageContent("https://nypost.com/2021/05/11/6-year-old-girl-fatally-shot-in-san-antonio-suspect-arrested/")).doesNotThrowAnyException();
+        assertThatCode(() -> newYorkPost.scrapPageContent("https://nypost.com/2021/05/11/6-year-old-girl-fatally-shot-in-san-antonio-suspect-arrested/", "19-May-2021 23:10:35")).doesNotThrowAnyException();
     }
 }

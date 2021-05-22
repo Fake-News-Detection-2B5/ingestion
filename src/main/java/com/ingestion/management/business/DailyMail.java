@@ -13,12 +13,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class DailyMail {
     public ArrayList<String> urlList = new ArrayList<>();
 
-    public JSONObject scrapPageContent(String link) throws IOException {
+    public JSONObject scrapPageContent(String link, String lastDate) throws IOException, ParseException {
         StringBuilder newsBody = new StringBuilder();
         JSONObject newsDetails = new JSONObject();
         Document doc = Jsoup.connect("https://www.dailymail.co.uk" + link).userAgent("Mozilla").get();
@@ -73,16 +72,20 @@ public class DailyMail {
 
             newsDetails.put("postDate", convertedDate2);
             newsDetails.put("thumbnail", newsThumbnail);
-            return newsDetails;
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+            if (sdf.parse(lastDate).before(sdf.parse(convertedDate2)))
+                return newsDetails;
+            else return null;
         } else
             return null;
     }
 
-    public String scrapMainPage() throws IOException {
+    public String scrapMainPage(String lastDate) throws IOException, ParseException {
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
-        String[] newsCategories = { "home/index.html", "news/index.html", "ushome/index.html", "sport/index.html",
-                "tvshowbiz/index.html", "health/index.html", "sciencetech/index.html", "money/index.html" };
+        String[] newsCategories = {"home/index.html", "news/index.html", "ushome/index.html", "sport/index.html",
+                "tvshowbiz/index.html", "health/index.html", "sciencetech/index.html", "money/index.html"};
 
         for (String category : newsCategories) {
             Document doc = Jsoup.connect("https://www.dailymail.co.uk/" + category).userAgent("Mozilla").get();
@@ -92,7 +95,7 @@ public class DailyMail {
                 String newsURL = link.attr("href");
                 if (newsURL.matches("(\\/.*)(\\/article-)([(0-9)]+)(\\/.*\\.html)")) {
                     if (!urlList.contains(newsURL)) {
-                        tempNews = scrapPageContent(newsURL);
+                        tempNews = scrapPageContent(newsURL, lastDate);
                         if (tempNews != null) {
                             newsList.add(tempNews);
                         }

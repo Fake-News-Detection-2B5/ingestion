@@ -1,11 +1,9 @@
 package com.ingestion.management;
 
+import com.ingestion.management.business.BuzzFeed;
 import org.junit.jupiter.api.Test;
 
-import com.ingestion.management.business.BuzzFeed;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BuzzFeedTest {
 
@@ -13,11 +11,11 @@ public class BuzzFeedTest {
 
     @Test
     public void shouldScrapWithoutErrors() {
-        assertThatCode(() -> controller.scrapMainPage()).doesNotThrowAnyException();
+        assertThatCode(() -> controller.scrapMainPage("19-May-2021 23:10:35")).doesNotThrowAnyException();
     }
 
     @Test
     public void scrapWithoutErrorsStaticMethod() {
-        assertThatCode(() -> controller.scrapPageContent("https://www.buzzfeednews.com/article/christopherm51/craig-lang-ukraine-far-right-extremists-true-crime")).doesNotThrowAnyException();
+        assertThatCode(() -> controller.scrapPageContent("https://www.buzzfeednews.com/article/christopherm51/craig-lang-ukraine-far-right-extremists-true-crime", "19-May-2021 23:10:35")).doesNotThrowAnyException();
     }
 }

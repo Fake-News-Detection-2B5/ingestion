@@ -13,12 +13,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class NewYorkPost {
     public ArrayList<String> urlList = new ArrayList<>();
 
-    public JSONObject scrapPageContent(String link) throws IOException {
+    public JSONObject scrapPageContent(String link, String lastDate) throws IOException, ParseException {
         JSONObject newsDetails = new JSONObject();
 
         StringBuilder newsBody = new StringBuilder();
@@ -59,6 +58,7 @@ public class NewYorkPost {
                 }
             }
         }
+
         if (newsBody.length() != 0 && !urlList.contains(link)) {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
@@ -80,13 +80,17 @@ public class NewYorkPost {
 
             newsDetails.put("postDate", convertedDate2);
             newsDetails.put("thumbnail", newsThumbnail);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             urlList.add(link);
-            return newsDetails;
+            if (sdf.parse(lastDate).before(sdf.parse(convertedDate2)))
+                return newsDetails;
+            else return null;
         } else
             return null;
     }
 
-    public String scrapMainPage() throws IOException {
+    public String scrapMainPage(String lastDate) throws IOException, ParseException {
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
         String[] newsCategories = {"", "news/", "business/", "entertainment/", "fashion/", "tech/"};
@@ -100,7 +104,7 @@ public class NewYorkPost {
                 String newsURL = link.attr("href");
                 if (newsURL.matches("(https:\\/\\/nypost.com\\/)([(0-9)]+\\/)([(0-9)]+\\/)([(0-9)]+)(\\/.*)")) {
                     if (!urlList.contains(newsURL)) {
-                        tempNews = scrapPageContent(newsURL);
+                        tempNews = scrapPageContent(newsURL, lastDate);
                         if (tempNews != null) {
                             newsList.add(tempNews);
                         }

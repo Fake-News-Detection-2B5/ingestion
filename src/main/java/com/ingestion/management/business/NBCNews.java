@@ -8,18 +8,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class NBCNews {
     public ArrayList<String> urlList = new ArrayList<>();
 
-    public JSONObject scrapPageContent(String link) throws IOException {
+    public JSONObject scrapPageContent(String link, String lastDate) throws IOException, ParseException {
         StringBuilder newsBody = new StringBuilder();
         JSONObject newsDetails = new JSONObject();
         Document doc = Jsoup.connect(link).userAgent("Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36").get();
@@ -30,7 +28,6 @@ public class NBCNews {
 
         Elements mainBlock = doc.getElementsByTag("article").attr("class", "article-body");
 
-
         if (doc.getElementsByClass("mb7").size() > 0) {
             if (doc.getElementsByClass("mb7").get(0).getElementsByAttribute("data-test").text().split("By").length > 0) {
                 if (doc.getElementsByClass("mb7").get(0).getElementsByAttribute("data-test").text().contains("By")) {
@@ -39,7 +36,6 @@ public class NBCNews {
                 }
             }
         }
-
 
         if (doc.getElementsByClass("article-hero__main-image").size() > 0) {
             if (doc.getElementsByClass("article-hero__main-image").get(0).getElementsByTag("img").size() > 0) {
@@ -64,6 +60,7 @@ public class NBCNews {
             }
 
         }
+
         if (newsBody.length() != 0 && !urlList.contains(link)) {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
@@ -83,14 +80,16 @@ public class NBCNews {
             newsDetails.put("postDate", convertedDate2);
             newsDetails.put("thumbnail", newsThumbnail);
 
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             urlList.add(link);
-            return newsDetails;
+            if (sdf.parse(lastDate).before(sdf.parse(convertedDate2)))
+                return newsDetails;
+            else return null;
         } else
             return null;
     }
 
-
-    public String scrapMainPage() throws IOException, InterruptedException {
+    public String scrapMainPage(String lastDate) throws IOException, InterruptedException, ParseException {
         String[] newsCategories = {"", "world", "politics", "business", "health", "entertainment"};
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
@@ -104,13 +103,12 @@ public class NBCNews {
                 String tempUrl = e.attr("href");
                 if (tempUrl.matches("(.*)/(.*)[(0-9)]+")) {
                     if (!tempUrl.contains("/video/")) {
-                        Thread.sleep(   50);
-                        tempNews = scrapPageContent(tempUrl);
+                        Thread.sleep(50);
+                        tempNews = scrapPageContent(tempUrl, lastDate);
                         if (tempNews != null)
                             newsList.add(tempNews);
                     }
                 }
-
             }
         }
         return newsList.toJSONString();

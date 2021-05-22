@@ -13,12 +13,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class HuffingtonPost {
     public ArrayList<String> urlList = new ArrayList<>();
 
-    public JSONObject scrapPageContent(String link) throws IOException {
+    public JSONObject scrapPageContent(String link, String lastDate) throws IOException, ParseException {
         StringBuilder newsBody = new StringBuilder();
         JSONObject newsDetails = new JSONObject();
         Document doc = Jsoup.connect(link).userAgent("Mozilla").get();
@@ -72,12 +71,16 @@ public class HuffingtonPost {
 
             newsDetails.put("postDate", convertedDate2);
             newsDetails.put("thumbnail", newsThumbnail);
-            return newsDetails;
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+            if (sdf.parse(lastDate).before(sdf.parse(convertedDate2)))
+                return newsDetails;
+            else return null;
         } else
             return null;
     }
 
-    public String scrapMainPage() throws IOException {
+    public String scrapMainPage(String lastDate) throws IOException, ParseException {
         JSONArray newsList = new JSONArray();
         JSONObject tempNews;
         String[] newsCategories = {"", "news/", "feature/coronavirus", "news/politics", "entertainment/", "section/huffpost-personal"};
@@ -91,7 +94,7 @@ public class HuffingtonPost {
                 String newsURL = link.attr("href");
                 if (newsURL.matches("(https:\\/\\/www.huffpost.com\\/)(entry)(\\/.*)")) {
                     if (!urlList.contains(newsURL)) {
-                        tempNews = scrapPageContent(newsURL);
+                        tempNews = scrapPageContent(newsURL, lastDate);
                         if (tempNews != null) {
                             newsList.add(tempNews);
                         }

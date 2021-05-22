@@ -60,7 +60,6 @@ public class BBCNews {
                 }
             }
         }
-
         return getJsonObject(url, newsDetails, newsTitle, newsAuthor, newsBody, newsDate, newsThumbnail, lastDate);
     }
 
@@ -119,7 +118,6 @@ public class BBCNews {
                             newsList.add(tempNews);
                     }
                 }
-
             }
         }
         return newsList.toJSONString();
