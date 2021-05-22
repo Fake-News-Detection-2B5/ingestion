@@ -141,13 +141,13 @@ public class NewsController {
         } else if (provider_id == 1) {
             newsSource = "buzzfeednews";
         } else if (provider_id == 2) {
-            newsSource = "huffpost";
-        } else if (provider_id == 3) {
-            newsSource = "nbcnews";
-        } else if (provider_id == 4) {
-            newsSource = "nypost";
-        } else if (provider_id == 5) {
             newsSource = "dailymail";
+        } else if (provider_id == 3) {
+            newsSource = "huffpost";
+        } else if (provider_id == 4) {
+            newsSource = "nbcnews";
+        } else if (provider_id == 5) {
+            newsSource = "nypost";
         }
 
         int i = 0;
