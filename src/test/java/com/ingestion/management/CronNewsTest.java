@@ -11,13 +11,13 @@ import static org.mockito.Mockito.mock;
 
 public class CronNewsTest {
 
-//    @Test
-//    public void shouldCallNY() throws IOException {
-//        NewsRepository repo = mock(NewsRepository.class);
-//        CronNews cronNews = new CronNews(repo);
-//
-//        assertThatCode(() -> cronNews.callNY()).doesNotThrowAnyException();
-//    }
+    @Test
+    public void shouldCallNY() throws IOException {
+        NewsRepository repo = mock(NewsRepository.class);
+        CronNews cronNews = new CronNews(repo);
+
+        assertThatCode(() -> cronNews.callNY()).doesNotThrowAnyException();
+    }
 
     @Test
     public void shouldCallBBC() throws IOException {
@@ -27,13 +27,13 @@ public class CronNewsTest {
         assertThatCode(() -> cronNews.callBBCNews()).doesNotThrowAnyException();
     }
 
-//    @Test
-//    public void shouldCallNBC() throws IOException {
-//        NewsRepository repo = mock(NewsRepository.class);
-//        CronNews cronNews = new CronNews(repo);
-//
-//        assertThatCode(() -> cronNews.callNBC()).doesNotThrowAnyException();
-//    }
+    @Test
+    public void shouldCallNBC() throws IOException {
+        NewsRepository repo = mock(NewsRepository.class);
+        CronNews cronNews = new CronNews(repo);
+
+        assertThatCode(() -> cronNews.callNBC()).doesNotThrowAnyException();
+    }
 
     @Test
     public void shouldCallHuffingtonPost() throws IOException {
