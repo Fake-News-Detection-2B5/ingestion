@@ -95,11 +95,8 @@ public class NewsController {
     public ResponseEntity<News> getById(@PathVariable UUID id) {
         Optional<News> news = this.newsRepository.findById(id);
 
-        if (!news.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return news.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
-        return new ResponseEntity<>(news.get(), HttpStatus.OK);
     }
 
     // requested by backend

@@ -66,72 +66,72 @@ public class CronNews {
         huffingtonPostLastRunDate = formatted.format(lastRunDate);
 //        System.out.println("Huffington:" + lastRunDate);
     }
-
-    @Scheduled(cron = "0 */30 * * * *")
-    public void callNY() throws IOException, ParseException {
-        NewYorkPost nyNews = new NewYorkPost();
-        String nynews = nyNews.scrapMainPage(NYLastRunDate);
-
-        Gson gson = new Gson();
-        News[] newsNY = gson.fromJson(nynews, News[].class);
-
-        this.newsRepository.saveAll(Arrays.asList(newsNY));
-
-        Date lastRunDate = new Date();
-
-        SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-        NYLastRunDate = formatted.format(lastRunDate);
-//        System.out.println("NewYork---:" + lastRunDate);
-    }
-
-    @Scheduled(cron = "0 */30 * * * *")
-    public void callNBC() throws IOException, InterruptedException, ParseException {
-        NBCNews nbcNews = new NBCNews();
-        String nbcnews = nbcNews.scrapMainPage(NBCLastRunDate);
-
-        Gson gson = new Gson();
-        News[] newsNBC = gson.fromJson(nbcnews, News[].class);
-
-        this.newsRepository.saveAll(Arrays.asList(newsNBC));
-
-        Date lastRunDate = new Date();
-
-        SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-        NBCLastRunDate = formatted.format(lastRunDate);
-//        System.out.println("NBCNews---:" + lastRunDate);
-    }
-
-    @Scheduled(cron = "0 */30 * * * *")
-    public void callBuzzFeed() throws IOException, ParseException {
-        BuzzFeed bfNews = new BuzzFeed();
-        String bfnews = bfNews.scrapMainPage(buzzFeedLastRunDate);
-
-        Gson gson = new Gson();
-        News[] newsBF = gson.fromJson(bfnews, News[].class);
-
-        this.newsRepository.saveAll(Arrays.asList(newsBF));
-
-        Date lastRunDate = new Date();
-
-        SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-        buzzFeedLastRunDate = formatted.format(lastRunDate);
-//        System.out.println("BuzzFeed--:" + lastRunDate);
-    }
-
-    @Scheduled(cron = "0 */30 * * * *")
-    public void callDailyMail() throws IOException, ParseException {
-        DailyMail dmNews = new DailyMail();
-        String dmnews = dmNews.scrapMainPage(dailyMailLastRunDate);
-
-        Gson gson = new Gson();
-        News[] newsDM = gson.fromJson(dmnews, News[].class);
-
-        this.newsRepository.saveAll(Arrays.asList(newsDM));
-
-        Date lastRunDate = new Date();
-
-        SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-        dailyMailLastRunDate = formatted.format(lastRunDate);
-//        System.out.println("DailyMail--:" + lastRunDate);
-    }
+//
+//    @Scheduled(cron = "0 */30 * * * *")
+//    public void callNY() throws IOException, ParseException {
+//        NewYorkPost nyNews = new NewYorkPost();
+//        String nynews = nyNews.scrapMainPage(NYLastRunDate);
+//
+//        Gson gson = new Gson();
+//        News[] newsNY = gson.fromJson(nynews, News[].class);
+//
+//        this.newsRepository.saveAll(Arrays.asList(newsNY));
+//
+//        Date lastRunDate = new Date();
+//
+//        SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+//        NYLastRunDate = formatted.format(lastRunDate);
+////        System.out.println("NewYork---:" + lastRunDate);
+//    }
+//
+//    @Scheduled(cron = "0 */30 * * * *")
+//    public void callNBC() throws IOException, InterruptedException, ParseException {
+//        NBCNews nbcNews = new NBCNews();
+//        String nbcnews = nbcNews.scrapMainPage(NBCLastRunDate);
+//
+//        Gson gson = new Gson();
+//        News[] newsNBC = gson.fromJson(nbcnews, News[].class);
+//
+//        this.newsRepository.saveAll(Arrays.asList(newsNBC));
+//
+//        Date lastRunDate = new Date();
+//
+//        SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+//        NBCLastRunDate = formatted.format(lastRunDate);
+////        System.out.println("NBCNews---:" + lastRunDate);
+//    }
+//
+//    @Scheduled(cron = "0 */30 * * * *")
+//    public void callBuzzFeed() throws IOException, ParseException {
+//        BuzzFeed bfNews = new BuzzFeed();
+//        String bfnews = bfNews.scrapMainPage(buzzFeedLastRunDate);
+//
+//        Gson gson = new Gson();
+//        News[] newsBF = gson.fromJson(bfnews, News[].class);
+//
+//        this.newsRepository.saveAll(Arrays.asList(newsBF));
+//
+//        Date lastRunDate = new Date();
+//
+//        SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+//        buzzFeedLastRunDate = formatted.format(lastRunDate);
+////        System.out.println("BuzzFeed--:" + lastRunDate);
+//    }
+//
+//    @Scheduled(cron = "0 */30 * * * *")
+//    public void callDailyMail() throws IOException, ParseException {
+//        DailyMail dmNews = new DailyMail();
+//        String dmnews = dmNews.scrapMainPage(dailyMailLastRunDate);
+//
+//        Gson gson = new Gson();
+//        News[] newsDM = gson.fromJson(dmnews, News[].class);
+//
+//        this.newsRepository.saveAll(Arrays.asList(newsDM));
+//
+//        Date lastRunDate = new Date();
+//
+//        SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+//        dailyMailLastRunDate = formatted.format(lastRunDate);
+////        System.out.println("DailyMail--:" + lastRunDate);
+//    }
 }
