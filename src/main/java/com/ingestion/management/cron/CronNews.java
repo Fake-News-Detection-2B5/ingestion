@@ -44,9 +44,10 @@ public class CronNews {
         this.newsRepository.saveAll(Arrays.asList(newsBBC));
 
         Date lastRunDate = new Date();
-        System.out.println("BBCNews---:" + lastRunDate);
+
         SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         bbcLastRunDate = formatted.format(lastRunDate);
+//        System.out.println("BBCNews---:" + lastRunDate);
     }
 
     @Scheduled(cron = "0 */30 * * * *")
@@ -60,9 +61,10 @@ public class CronNews {
         this.newsRepository.saveAll(Arrays.asList(newsHuffinton));
 
         Date lastRunDate = new Date();
-        System.out.println("Huffington:" + lastRunDate);
+
         SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         huffingtonPostLastRunDate = formatted.format(lastRunDate);
+//        System.out.println("Huffington:" + lastRunDate);
     }
 
     @Scheduled(cron = "0 */30 * * * *")
@@ -76,9 +78,10 @@ public class CronNews {
         this.newsRepository.saveAll(Arrays.asList(newsNY));
 
         Date lastRunDate = new Date();
-        System.out.println("NewYork---:" + lastRunDate);
+
         SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         NYLastRunDate = formatted.format(lastRunDate);
+//        System.out.println("NewYork---:" + lastRunDate);
     }
 
     @Scheduled(cron = "0 */30 * * * *")
@@ -92,9 +95,10 @@ public class CronNews {
         this.newsRepository.saveAll(Arrays.asList(newsNBC));
 
         Date lastRunDate = new Date();
-        System.out.println("NBCNews---:" + lastRunDate);
+
         SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         NBCLastRunDate = formatted.format(lastRunDate);
+//        System.out.println("NBCNews---:" + lastRunDate);
     }
 
     @Scheduled(cron = "0 */30 * * * *")
@@ -108,9 +112,10 @@ public class CronNews {
         this.newsRepository.saveAll(Arrays.asList(newsBF));
 
         Date lastRunDate = new Date();
-        System.out.println("BuzzFeed--:" + lastRunDate);
+
         SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         buzzFeedLastRunDate = formatted.format(lastRunDate);
+//        System.out.println("BuzzFeed--:" + lastRunDate);
     }
 
     @Scheduled(cron = "0 */30 * * * *")
@@ -124,8 +129,9 @@ public class CronNews {
         this.newsRepository.saveAll(Arrays.asList(newsDM));
 
         Date lastRunDate = new Date();
-        System.out.println("DailyMail--:" + lastRunDate);
+
         SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         dailyMailLastRunDate = formatted.format(lastRunDate);
+//        System.out.println("DailyMail--:" + lastRunDate);
     }
 }

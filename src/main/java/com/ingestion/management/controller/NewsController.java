@@ -110,17 +110,21 @@ public class NewsController {
 
         List<News> filteredList = new ArrayList<>();
 
-        int i = 0;
+//        int i = 0;
 
-        for (News news : list) {
-            if (i == (count + skip)) // numerotarea incepe de la 0..
-            {
-                break;
-            }
-            if (i >= skip) {
-                filteredList.add(news);
-            }
-            i++;
+//        for (News news : list) {
+////            if (i == (count + skip)) // numerotarea incepe de la 0..
+////            {
+////                break;
+////            }
+//            if (i >= skip) {
+//                filteredList.add(news);
+//            }
+//            i++;
+//        }
+        int end=skip+count;
+        for(int i=skip;i<end;i++){
+            filteredList.add(list.get(i));
         }
 
         return filteredList;
