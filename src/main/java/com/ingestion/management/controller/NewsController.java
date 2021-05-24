@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 //import java.io.IOException;
@@ -188,24 +189,6 @@ public class NewsController {
     // * @param c how many rows are necessary
     // * @return a List with the ProviderEntity requested
     // */
-    // @GetMapping(path = "providers/getInterval")
-    // public List<String> getInterval(@RequestParam(name = "skip", required = true)
-    // int skip,
-    // @RequestParam(name = "count", required = true) int count) {
-    // List<String> newsProvider = new ArrayList<String>();
-    // List<String> list = getNewsSources().getBody();
-    // int i = skip;
-
-    // while (i < count + skip) {
-    // String name = list.get(i);
-    // newsProvider.add(name);
-    // i++;
-    // }
-
-    // return newsProvider;
-    // }
-    // pls work now, ty
-
     @GetMapping(path = "providers/getInterval")
     public List<ProviderEntity> getInterval(@RequestParam(name = "skip", required = true) int skip,
             @RequestParam(name = "count", required = true) int count) {
@@ -364,8 +347,31 @@ public class NewsController {
 
         List<News> list = this.newsRepository.findAll();
 
-        if (order != null && order.equals("desc"))
-            list.sort((n1, n2) -> n2.getPostDate().compareTo(n1.getPostDate()));
+        if (order != null && order.equals("desc")) {
+            list.sort((n1, n2) -> {
+                DateFormat format = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+                try {
+                    Date date1 = format.parse(n1.getPostDate());
+                    Date date2 = format.parse(n2.getPostDate());
+
+                    return date2.compareTo(date1);
+                } catch (Exception e) {
+                    return 0;
+                }
+            });
+        } else {
+            list.sort((n1, n2) -> {
+                DateFormat format = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+                try {
+                    Date date1 = format.parse(n1.getPostDate());
+                    Date date2 = format.parse(n2.getPostDate());
+
+                    return date1.compareTo(date2);
+                } catch (Exception e) {
+                    return 0;
+                }
+            });
+        }
 
         List<News> filteredList = new ArrayList<>();
         String newsSources[] = new String[6];
@@ -391,195 +397,120 @@ public class NewsController {
         int end = skip + count;
         int i = 0;
 
-        if (end > list.size())
+        if (end > list.size()) {
             end = list.size();
+        }
         for (News news : list) {
             k = 0;
             while (k < providerIds.size()) {
                 if (news.getUrl() != null && news.getUrl().contains(newsSources[k])) {
-                    if (i == (count + skip)) // numerotarea incepe de la 0..
-                    {
-                        break;
+                    if (i == end) {
+                        return filteredList;
                     }
-                    if (i >= skip) {
-                        if (query != null && news.getTitle().contains(query)) {
-                            if (date != null) {
-                                switch (date) {
-                                    case "day":
-                                        try {
-                                            Date dateNew = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
-                                                    .parse(news.getPostDate());
 
-                                            Calendar c = Calendar.getInstance();
-                                            c.setTime(new Date(System.currentTimeMillis()));
-                                            c.add(Calendar.DATE, -1); // number of days to add
-                                            Date dateNext = c.getTime();
-
-                                            if (!dateNew.before(dateNext)) {
-                                                filteredList.add(news);
-                                            }
-
-                                        } catch (ParseException e) {
-                                            // TODO Auto-generated catch block
-                                            e.printStackTrace();
-                                        }
-                                        break;
-
-                                    case "week":
-                                        try {
-                                            Date dateNew = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
-                                                    .parse(news.getPostDate());
-
-                                            Calendar c = Calendar.getInstance();
-                                            c.setTime(new Date(System.currentTimeMillis()));
-                                            c.add(Calendar.DATE, -7); // number of days to add
-                                            Date dateNext = c.getTime();
-
-                                            if (!dateNew.before(dateNext)) {
-                                                filteredList.add(news);
-                                            }
-
-                                        } catch (ParseException e) {
-                                            // TODO Auto-generated catch block
-                                            e.printStackTrace();
-                                        }
-                                        break;
-
-                                    case "month":
-                                        try {
-                                            Date dateNew = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
-                                                    .parse(news.getPostDate());
-
-                                            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-                                            Calendar c = Calendar.getInstance();
-                                            c.setTime(new Date(System.currentTimeMillis()));
-                                            c.add(Calendar.DATE, -30); // number of days to add
-                                            Date dateNext = c.getTime();
-
-                                            if (!dateNew.before(dateNext)) {
-                                                filteredList.add(news);
-                                            }
-
-                                        } catch (ParseException e) {
-                                            // TODO Auto-generated catch block
-                                            e.printStackTrace();
-                                        }
-
-                                        break;
-                                    case "year":
-                                        try {
-                                            Date dateNew = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
-                                                    .parse(news.getPostDate());
-
-                                            Calendar c = Calendar.getInstance();
-                                            c.setTime(new Date(System.currentTimeMillis()));
-                                            c.add(Calendar.DATE, -365); // number of days to add
-                                            Date dateNext = c.getTime();
-
-                                            if (!dateNew.before(dateNext)) {
-                                                filteredList.add(news);
-                                            }
-
-                                        } catch (ParseException e) {
-                                            // TODO Auto-generated catch block
-                                            e.printStackTrace();
-                                        }
-                                        break;
-
-                                }
-                            } else
+                    if (query != null && news.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                        if (checkDate(date, news)) {
+                            if (i >= skip)
                                 filteredList.add(news);
-                        } else if (query == null) {
-                            if (date != null) {
-                                switch (date) {
-                                    case "day":
-                                        try {
-                                            Date dateNew = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
-                                                    .parse(news.getPostDate());
-
-                                            Calendar c = Calendar.getInstance();
-                                            c.setTime(new Date(System.currentTimeMillis()));
-                                            c.add(Calendar.DATE, -1); // number of days to add
-                                            Date dateNext = c.getTime();
-
-                                            if (!dateNew.before(dateNext)) {
-                                                filteredList.add(news);
-                                            }
-
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-                                        break;
-
-                                    case "week":
-                                        try {
-                                            Date dateNew = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
-                                                    .parse(news.getPostDate());
-
-                                            Calendar c = Calendar.getInstance();
-                                            c.setTime(new Date(System.currentTimeMillis()));
-                                            c.add(Calendar.DATE, -7); // number of days to add
-                                            Date dateNext = c.getTime();
-
-                                            if (!dateNew.before(dateNext)) {
-                                                filteredList.add(news);
-                                            }
-
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-                                        break;
-
-                                    case "month":
-                                        try {
-                                            Date dateNew = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
-                                                    .parse(news.getPostDate());
-
-                                            Calendar c = Calendar.getInstance();
-                                            c.setTime(new Date(System.currentTimeMillis()));
-                                            c.add(Calendar.DATE, -30); // number of days to add
-                                            Date dateNext = c.getTime();
-
-                                            if (!dateNew.before(dateNext)) {
-                                                filteredList.add(news);
-                                            }
-
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                        break;
-                                    case "year":
-                                        try {
-                                            Date dateNew = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
-                                                    .parse(news.getPostDate());
-
-                                            Calendar c = Calendar.getInstance();
-                                            c.setTime(new Date(System.currentTimeMillis()));
-                                            c.add(Calendar.DATE, -365); // number of days to add
-                                            Date dateNext = c.getTime();
-
-                                            if (!dateNew.before(dateNext)) {
-                                                filteredList.add(news);
-                                            }
-
-                                        } catch (ParseException e) {
-                                            e.printStackTrace();
-                                        }
-                                        break;
-
-                                }
-                            } else
-                                filteredList.add(news);
+                            i++;
                         }
-                        i++;
+                    } else if (query == null) {
+                        if (checkDate(date, news)) {
+                            if (i >= skip)
+                                filteredList.add(news);
+                            i++;
+                        }
                     }
-                    k++;
                 }
+                k++;
             }
         }
         return filteredList;
+    }
 
+    private boolean checkDate(String date, News news) {
+        if (date != null) {
+            switch (date) {
+                case "day":
+                    try {
+                        Date postDate = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(news.getPostDate());
+
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(new Date(System.currentTimeMillis()));
+                        c.add(Calendar.DATE, -1); // number of days to add
+                        Date dateNow = c.getTime();
+
+                        if (!postDate.before(dateNow)) {
+                            return true;
+                        }
+
+                    } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    break;
+
+                case "week":
+                    try {
+                        Date postDate = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(news.getPostDate());
+
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(new Date(System.currentTimeMillis()));
+                        c.add(Calendar.DATE, -7); // number of days to add
+                        Date dateNow = c.getTime();
+
+                        if (!postDate.before(dateNow)) {
+                            return true;
+                        }
+
+                    } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    break;
+
+                case "month":
+                    try {
+                        Date postDate = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(news.getPostDate());
+
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(new Date(System.currentTimeMillis()));
+                        c.add(Calendar.DATE, -30); // number of days to add
+                        Date dateNow = c.getTime();
+
+                        if (!postDate.before(dateNow)) {
+                            return true;
+                        }
+
+                    } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                    break;
+                case "year":
+                    try {
+                        Date postDate = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(news.getPostDate());
+
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(new Date(System.currentTimeMillis()));
+                        c.add(Calendar.DATE, -365); // number of days to add
+                        Date dateNow = c.getTime();
+
+                        if (!postDate.before(dateNow)) {
+                            return true;
+                        }
+
+                    } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        } else {
+            return true;
+        }
+        return false;
     }
 
 }
