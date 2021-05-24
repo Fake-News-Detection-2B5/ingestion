@@ -324,7 +324,7 @@ public class NewsController {
         }
 
         int end = skip + count;
-        int i = skip;
+        int i = 0;
 
         if (end > list.size())
             end = list.size();
