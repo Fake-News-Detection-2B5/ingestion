@@ -112,24 +112,10 @@ public class NewsController {
         if (end > list.size())
             end = list.size();
         for (int i = skip; i < end; i++) {
-
-            // int i = 0;
-
-            // for (News news : list) {
-            //// if (i == (count + skip)) // numerotarea incepe de la 0..
-            //// {
-            //// break;
-            //// }
-            // if (i >= skip) {
-            // filteredList.add(news);
-            // }
-            // i++;
-            // }
             filteredList.add(list.get(i));
         }
 
         return filteredList;
-        // return null;
     }
 
     @GetMapping("/getIntervalByProvider")
@@ -305,6 +291,58 @@ public class NewsController {
                     filteredList.add(i);
             }
 
+        }
+
+        return filteredList;
+    }
+
+    @GetMapping(path = "/getIntervalByArray")
+    public List<News> getIntervalByArray(@RequestParam(name = "list", required = true) List<Integer> providerIds,
+            @RequestParam(name = "skip", required = true) Integer skip,
+            @RequestParam(name = "count", required = true) Integer count) {
+        List<News> list = this.newsRepository.findAll();
+
+        List<News> filteredList = new ArrayList<>();
+        String newsSources[] = new String[6];
+        int k = 0;
+
+        for (int j : providerIds) {
+            if (j == 0) {
+                newsSources[k] = "bbc";
+            } else if (j == 1) {
+                newsSources[k] = "buzzfeednews";
+            } else if (j == 2) {
+                newsSources[k] = "dailymail";
+            } else if (j == 3) {
+                newsSources[k] = "huffpost";
+            } else if (j == 4) {
+                newsSources[k] = "nbcnews";
+            } else if (j == 5) {
+                newsSources[k] = "nypost";
+            }
+            k++;
+        }
+
+        int end = skip + count;
+        int i = skip;
+
+        if (end > list.size())
+            end = list.size();
+        for (News news : list) {
+            k = 0;
+            while (k < providerIds.size()) {
+                if (news.getUrl() != null && news.getUrl().contains(newsSources[k])) {
+                    if (i == (count + skip)) // numerotarea incepe de la 0..
+                    {
+                        break;
+                    }
+                    if (i >= skip) {
+                        filteredList.add(news);
+                    }
+                    i++;
+                }
+                k++;
+            }
         }
 
         return filteredList;
