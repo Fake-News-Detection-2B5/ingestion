@@ -63,8 +63,8 @@ public class NewYorkPost {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", link);
-            newsDetails.put("content", JSONValue.escape(newsBody.toString()));
-            newsDetails.put("description",JSONValue.escape(newsBody.substring(0, 150)));
+            newsDetails.put("description", JSONValue.escape(newsBody.toString()));
+//            newsDetails.put("description",JSONValue.escape(newsBody.substring(0, 150)));
 
             if (newsDate.contains("| Updated"))
                 newsDate = newsDate.split("\\| Updated")[0];

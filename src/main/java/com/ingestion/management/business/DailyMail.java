@@ -57,8 +57,8 @@ public class DailyMail {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", newsUrl);
-            newsDetails.put("content", JSONValue.escape(newsBody.toString()));
-            newsDetails.put("description",JSONValue.escape(newsBody.substring(0, 150)));
+            newsDetails.put("description", JSONValue.escape(newsBody.toString()));
+//            newsDetails.put("description",JSONValue.escape(newsBody.substring(0, 150)));
 
             SimpleDateFormat format = new SimpleDateFormat("hh:mm 'BST', dd MMM yyyy");
             SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");

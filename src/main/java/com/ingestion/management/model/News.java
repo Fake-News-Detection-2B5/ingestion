@@ -20,7 +20,7 @@ public class News {
     private String description;
     private String postDate;
     private String thumbnail;
-    private String content;
+//    private String content;
 
     public News() {
         setId(UUID.randomUUID());
@@ -82,9 +82,9 @@ public class News {
         this.url = url;
     }
 
-    public String getContent() { return content; }
-
-    public void setContent(String content) { this.content=content; }
+//    public String getContent() { return content; }
+//
+//    public void setContent(String content) { this.content=content; }
 
     @Override
     public boolean equals(Object o) {
@@ -95,19 +95,19 @@ public class News {
         News news = (News) o;
         return url.equals(news.url) && Objects.equals(id, news.id) && Objects.equals(author, news.author)
                 && Objects.equals(thumbnail, news.thumbnail) && Objects.equals(title, news.title)
-                && Objects.equals(description, news.description) && Objects.equals(postDate, news.postDate)
-                && Objects.equals(content, news.content);
+                && Objects.equals(description, news.description) && Objects.equals(postDate, news.postDate);
+//                && Objects.equals(content, news.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, author, postDate, thumbnail, url, content);
+        return Objects.hash(id, title, description, author, postDate, thumbnail);//, content);
     }
 
     @Override
     public String toString() {
         return "News{" + "id=" + id + ", title='" + title + '\'' + ", thumbnail='" + thumbnail + '\'' + ", url='" + url
-                + '\'' + ", description='" + description + '\'' + ", postDate=" + postDate + '\'' + ",content =" +'}';
+                + '\'' + ", description='" + description + '\'' + ", postDate=" + postDate + '\'' +'}'; //+ ",content =" +'}';
     }
 
 
