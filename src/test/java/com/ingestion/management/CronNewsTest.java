@@ -43,11 +43,19 @@ public class CronNewsTest {
         assertThatCode(() -> cronNews.callHuffingtonPost()).doesNotThrowAnyException();
     }
 
-//    @Test
-//    public void shouldCallDailyMail() throws IOException {
-//        NewsRepository repo = mock(NewsRepository.class);
-//        CronNews cronNews = new CronNews(repo);
-//
-//        assertThatCode(() -> cronNews.callDailyMail()).doesNotThrowAnyException();
-//    }
+    @Test
+    public void shouldCallDailyMail() throws IOException {
+        NewsRepository repo = mock(NewsRepository.class);
+        CronNews cronNews = new CronNews(repo);
+
+        assertThatCode(() -> cronNews.callDailyMail()).doesNotThrowAnyException();
+    }
+
+    @Test
+    public void shouldBuzzFeed() throws IOException {
+        NewsRepository repo = mock(NewsRepository.class);
+        CronNews cronNews = new CronNews(repo);
+
+        assertThatCode(() -> cronNews.callBuzzFeed()).doesNotThrowAnyException();
+    }
 }

@@ -65,7 +65,8 @@ public class NBCNews {
             newsDetails.put("title", newsTitle);
             newsDetails.put("author", newsAuthor);
             newsDetails.put("url", link);
-            newsDetails.put("description", JSONValue.escape(newsBody.toString()));
+            newsDetails.put("content", JSONValue.escape(newsBody.toString()));
+            newsDetails.put("description",JSONValue.escape(newsBody.substring(0, 150)));
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             Date convertedDate;
