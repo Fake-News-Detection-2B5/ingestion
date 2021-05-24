@@ -108,27 +108,23 @@ public class NewsController {
 
         List<News> filteredList = new ArrayList<>();
 
-
         int end = skip + count;
         if (end > list.size())
             end = list.size();
         for (int i = skip; i < end; i++) {
 
-//        int i = 0;
+            // int i = 0;
 
-//        for (News news : list) {
-////            if (i == (count + skip)) // numerotarea incepe de la 0..
-////            {
-////                break;
-////            }
-//            if (i >= skip) {
-//                filteredList.add(news);
-//            }
-//            i++;
-//        }
-        int end=skip+count;
-        for(int i=skip;i<end;i++){
-
+            // for (News news : list) {
+            //// if (i == (count + skip)) // numerotarea incepe de la 0..
+            //// {
+            //// break;
+            //// }
+            // if (i >= skip) {
+            // filteredList.add(news);
+            // }
+            // i++;
+            // }
             filteredList.add(list.get(i));
         }
 
