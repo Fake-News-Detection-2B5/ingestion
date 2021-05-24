@@ -1,15 +1,27 @@
 package com.ingestion.management.controller;
 
+//import com.google.gson.Gson;
+
+//import com.ingestion.management.business.BBCNewsController;
+
+//import com.ingestion.management.business.*;
+//import com.ingestion.management.business.NewsSources;
 import com.ingestion.management.model.IntWrapper;
+//import com.ingestion.management.business.BuzzFeedController;
+//import com.ingestion.management.business.NBCNewsController;
 import com.ingestion.management.model.News;
 import com.ingestion.management.model.ProviderEntity;
 import com.ingestion.management.repository.NewsRepository;
 import com.ingestion.management.service.INewsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+//import java.io.IOException;
 import java.util.ArrayList;
+//import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +34,7 @@ public class NewsController {
 
     public NewsController(NewsRepository newsRepository, INewsService newsService) {
         this.newsRepository = newsRepository;
+        // this.newsService = newsService;
     }
 
     @Autowired
@@ -94,12 +107,25 @@ public class NewsController {
 
         List<News> filteredList = new ArrayList<>();
 
+//        int i = 0;
+
+//        for (News news : list) {
+////            if (i == (count + skip)) // numerotarea incepe de la 0..
+////            {
+////                break;
+////            }
+//            if (i >= skip) {
+//                filteredList.add(news);
+//            }
+//            i++;
+//        }
         int end=skip+count;
         for(int i=skip;i<end;i++){
             filteredList.add(list.get(i));
         }
 
         return filteredList;
+        // return null;
     }
 
     @GetMapping("/getIntervalByProvider")
