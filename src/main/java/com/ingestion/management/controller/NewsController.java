@@ -82,7 +82,8 @@ public class NewsController {
     public ResponseEntity<News> getById(@PathVariable UUID id) {
         Optional<News> news = this.newsRepository.findById(id);
 
-        return news.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return news.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
     }
 
@@ -94,8 +95,10 @@ public class NewsController {
 
         List<News> filteredList = new ArrayList<>();
 
-        int end=skip+count;
-        for(int i=skip;i<end;i++){
+        int end = skip + count;
+        if (end > list.size())
+            end = list.size();
+        for (int i = skip; i < end; i++) {
             filteredList.add(list.get(i));
         }
 
@@ -190,11 +193,13 @@ public class NewsController {
             @RequestParam(name = "count", required = true) int count) {
         List<ProviderEntity> newsProvider = new ArrayList<>();
         List<String> list = getNewsSources().getBody();
-        if (list == null) return null;
+        if (list == null)
+            return null;
         int i = skip;
 
         while (i < count + skip) {
-            if (i >= list.size()) break;
+            if (i >= list.size())
+                break;
             String name = list.get(i);
             newsProvider.add(new ProviderEntity(i, name, 0, "no-avatar"));
             i++;
