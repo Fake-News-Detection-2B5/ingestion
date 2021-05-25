@@ -276,21 +276,24 @@ public class NewsController {
     // */
 
     @GetMapping(path = "/search")
-    public List<String> search(@RequestParam(name = "query", required = true) String query,
-            @RequestParam(name = "skip", required = true) int skip,
-            @RequestParam(name = "count", required = true) int count) {
+    public List<ProviderEntity> search(@RequestParam(name = "query", required = true) String query,
+                                       @RequestParam(name = "skip", required = true) int skip,
+                                       @RequestParam(name = "count", required = true) int count) {
 
-        List<String> filteredList = new ArrayList<String>();
+        List<ProviderEntity> filteredList = new ArrayList<ProviderEntity>();
 
         Integer number = 0;
         List<String> list = getNewsSources().getBody();
-        for (String i : list) {
-            if (i.indexOf(query) != -1) {
-                number++;
-                if (number > skip && number <= skip + count)
-                    filteredList.add(i);
-            }
 
+        int i = skip;
+
+
+        while (i < count + skip) {
+            if (i >= list.size())
+                break;
+            String name = list.get(i);
+            filteredList.add(new ProviderEntity(i, name, 0, "no-avatar"));
+            i++;
         }
 
         return filteredList;
