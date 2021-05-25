@@ -131,6 +131,18 @@ public class NewsController {
 
         List<News> list = this.newsRepository.findAll();
 
+        list.sort((n1, n2) -> {
+            DateFormat format = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+            try {
+                Date date1 = format.parse(n1.getPostDate());
+                Date date2 = format.parse(n2.getPostDate());
+
+                return date2.compareTo(date1);
+            } catch (Exception e) {
+                return 0;
+            }
+        });
+
         List<News> filteredList = new ArrayList<>();
         String newsSource = "";
         if (provider_id == 0) {
